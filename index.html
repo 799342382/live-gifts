@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>赠品学习中心</title>
+  <!-- 二维码生成库（保留原依赖） -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Arial", sans-serif; }
+    body { background: #f7f8fa; font-size: 20px; }
+    header { background-color: #4a90e2; padding: 20px; color: white; text-align: center; font-size: 28px; font-weight: bold; }
+    nav { display: flex; justify-content: space-around; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 99; }
+    nav button { flex: 1; padding: 16px 0; background: none; border: none; font-size: 20px; cursor: pointer; }
+    nav button.active { color: #4a90e2; font-weight: bold; border-bottom: 2px solid #4a90e2; }
+    .section { display: none; padding: 24px; }
+    .section.active { display: block; }
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 24px; }
+    .card h3 { margin-bottom: 12px; color: #333; font-size: 24px; }
+    .card p, .card ul { color: #555; font-size: 18px; line-height: 1.8; }
+    .card ul { list-style: none; padding-left: 0; }
+    .card ul li { margin-bottom: 14px; }
+    .card a { color: #007aff; text-decoration: none; }
+    .card a:hover { text-decoration: underline; }
+
+    /* 报名按钮样式升级 */
+    .btn-primary {
+      display: inline-block; width: 100%; padding: 16px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #4a90e2, #6ab7ff); color: #fff; font-size: 20px; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(74,144,226,0.35);
+    }
+    .btn-primary:active { transform: scale(0.99); }
+
+    /* 弹窗（保留其余功能不变，仅新增） */
+    .modal-mask {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      display: none; align-items: center; justify-content: center; z-index: 999;
+      padding: 16px;
+    }
+    .modal { width: 100%; max-width: 720px; background: #fff; border-radius: 18px; overflow: hidden; }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; background: #f0f6ff; border-bottom: 1px solid #e6efff;
+    }
+    .modal-title { font-size: 22px; font-weight: 700; color: #1f2d3d; }
+    .modal-close { font-size: 26px; border: none; background: transparent; cursor: pointer; color: #6b7c93; }
+    .modal-body { padding: 18px; display: grid; gap: 16px; }
+    .enroll-grid {
+      display: grid; gap: 16px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .enroll-card {
+      border: 1px solid #eef2f7; border-radius: 14px; padding: 16px;
+      background: #ffffff;
+    }
+    .enroll-card h4 { font-size: 20px; margin-bottom: 8px; color: #2b2f36; }
+    .enroll-card p { font-size: 16px; color: #4a4f57; line-height: 1.7; }
+    .wx-block {
+      background: #fbfdff; border: 1px dashed #b9d6ff; border-radius: 12px; padding: 12px; margin-top: 10px;
+    }
+    .wx-id { font-family: "Courier New", monospace; font-weight: 700; color: #0b6bff; word-break: break-all; }
+    .qr-wrap { display: flex; align-items: center; justify-content: center; padding: 12px; background: #fff; border-radius: 12px; border: 1px solid #eef2f7; margin-top: 12px; }
+    .qr-canvas { width: 220px; height: 220px; }
+    .btn-row { display: flex; gap: 10px; margin-top: 12px; }
+    .btn {
+      flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #e6e9ef; background: #fafbff; cursor: pointer; font-size: 16px;
+    }
+    .btn:hover { background: #f1f6ff; }
+    .btn-strong { background: #0b6bff; color: #fff; border-color: #0b6bff; }
+    .hint { font-size: 14px; color: #667085; margin-top: 8px; }
+
+    /* 复制反馈气泡 */
+    .toast {
+      position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%);
+      background: rgba(0,0,0,0.8); color: #fff; font-size: 16px; padding: 10px 14px; border-radius: 10px; display: none; z-index: 1000;
+    }
+
+    /* 移动端自适应 */
+    @media (max-width: 820px) {
+      header { font-size: 24px; }
+      nav button { font-size: 18px; }
+      .enroll-grid { grid-template-columns: 1fr; }
+      .qr-canvas { width: 200px; height: 200px; }
+    }
+    /* 保留原页面中的 #qrcode 容器，但隐藏（避免影响布局） */
+    #qrcode { display: none; }
+  </style>
+</head>
+<body>
+  <header>赠品学习中心</header>
+
+  <nav>
+    <button class="active" onclick="showTab('home')">首页</button>
+    <button onclick="showTab('learn')">学习</button>
+    <button onclick="showTab('mine')">我的</button>
+  </nav>
+
+  <main>
+    <div class="section active" id="home">
+      <div class="card">
+        <h3>📢 本期线下课程通知</h3>
+        <p>
+          🔹课程名称：AI觉醒总裁班<br>
+          🔹课程时间：2025年9月11日—9月14日<br>
+          🔹课程时长：四天三晚<br>
+          🔹课程地点：广东
+        </p>
+      </div>
+
+      <hr>
+
+      <div class="card">
+        <h3>📢 历史线下课程</h3>
+        <p>
+          🔹课程名称：AI变现总裁班<span style="color: #FF6347; font-weight: bold; font-size: 1.2rem;">《高阶课》</span><br>
+          🔹课程时间：2025年8月25日—8月28日<br>
+          🔹课程时长：四天三晚<br>
+          🔹课程地点：广东
+        </p>
+      </div>
+
+      <!-- 报名入口（由原「点击报名」升级为双通道弹窗） -->
+      <div class="card">
+        <button class="btn-primary" onclick="openEnrollModal()">报名入口</button>
+      </div>
+
+      <!-- 保留原 #qrcode 容器以兼容旧逻辑（隐藏，不影响新功能） -->
+      <div id="qrcode"></div>
+    </div>
+
+    <div class="section" id="learn">
+      <div class="card">
+        <h3>📚 直播间赠送福利</h3>
+        <ul>
+          <li>🎁 <strong>Deepseek保姆级使用技巧大全</strong><br><a href="https://pan.quark.cn/s/21d5a32c1006#/list/share" target="_blank">点击领取</a></li>
+          <li>🎁 <strong>剪映魔法版（解锁高级功能）</strong><br><a href="https://pan.quark.cn/s/016ad003b06b" target="_blank">点击领取</a></li>
+        </ul>
+        <p>（后续将持续添加更多稀缺资源，敬请关注）</p>
+      </div>
+    </div>
+
+    <div class="section" id="mine">
+      <div class="card">
+        <h3>👤 我的工具</h3>
+        <p>后续将对接“AI神器”中的模块，如学习大全、智能体、资源集合等</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- 报名弹窗 -->
+  <div class="modal-mask" id="enrollMask" onclick="maskClick(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="enrollTitle">
+      <div class="modal-header">
+        <div class="modal-title" id="enrollTitle">报名通道（请选择）</div>
+        <button class="modal-close" aria-label="关闭" onclick="closeEnrollModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="enroll-grid">
+
+          <!-- 通道一：未报名学习过 -->
+          <div class="enroll-card">
+            <h4>① 我还没有报名学习过</h4>
+            <p>请添加我的微信，联系我报名。</p>
+            <div class="wx-block">
+              <div>微信号：</div>
+              <div class="wx-id" id="wxText">Y613148639391</div>
+              <div class="hint">（复制微信号后，打开微信搜索粘贴添加）</div>
+            </div>
+            <div class="qr-wrap">
+              <canvas id="qrNewStudents" class="qr-canvas" aria-label="扫码添加微信二维码"></canvas>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-strong" onclick="copyWx()">一键复制微信号</button>
+              <button class="btn" onclick="openWeChat()">打开微信尝试添加</button>
+            </div>
+            <div class="hint">若扫码不跳转，请直接复制微信号添加。</div>
+          </div>
+
+          <!-- 通道二：我已经有班主任 -->
+          <div class="enroll-card">
+            <h4>② 我已经有班主任</h4>
+            <p>请联系你的班主任，按班主任的报名流程进行登记与缴费。</p>
+            <div class="wx-block" style="border-color:#d8f5d0;background:#f7fff5;">
+              <div>温馨提示：</div>
+              <ul style="margin-top:6px; padding-left:18px; list-style: disc;">
+                <li>与班主任确认本期课程时间、地点与班车安排。</li>
+                <li>核对听课人姓名与手机号，避免漏登、重登。</li>
+                <li>报到当天凭班主任确认信息入场。</li>
+              </ul>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-strong" onclick="ackClassTeacher()">我知道了，去找班主任</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 复制提示 -->
+  <div class="toast" id="toast">已复制到剪贴板</div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // ====== 新增：报名弹窗逻辑 ======
+    const WX_ID = 'Y613148639391';
+
+    function openEnrollModal() {
+      const mask = document.getElementById('enrollMask');
+      mask.style.display = 'flex';
+      // 生成二维码（使用微信号文本，用户扫码可识别/保存）
+      // 为通用性，这里将微信号放入二维码文本中，便于识别和转发
+      const canvas = document.getElementById('qrNewStudents');
+      try {
+        QRCode.toCanvas(canvas, '微信号：' + WX_ID, { width: 220, margin: 1 }, function (error) {
+          if (error) console.error('二维码生成失败：', error);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function closeEnrollModal() {
+      document.getElementById('enrollMask').style.display = 'none';
+    }
+
+    // 点击遮罩但非内容区时关闭
+    function maskClick(e) {
+      if (e.target.id === 'enrollMask') closeEnrollModal();
+    }
+
+    // 复制微信号
+    function copyWx() {
+      const text = WX_ID;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(showToast);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast(); } catch (e) { alert('复制失败，请手动复制：' + text); }
+        document.body.removeChild(ta);
+      }
+    }
+
+    // 打开微信（在部分移动端可能会被浏览器拦截，此为尝试方式）
+    function openWeChat() {
+      // 优先调起微信，如果失败则提示用户复制微信号添加
+      const scheme = 'weixin://';
+      const timer = setTimeout(() => {
+        alert('如果未能自动打开微信，请点击“一键复制微信号”，到微信中搜索添加：' + WX_ID);
+      }, 1200);
+      window.location.href = scheme;
+      setTimeout(() => clearTimeout(timer), 2000);
+    }
+
+    function ackClassTeacher() {
+      alert('已知悉，请联系你的班主任完成报名。');
+      closeEnrollModal();
+    }
+
+    // 轻提示
+    let toastTimer = null;
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.style.display = 'block';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => (t.style.display = 'none'), 1600);
+    }
+
+    // ====== 兼容旧函数：保留但不再触发旧二维码位于首页显示 ======
+    function generateQRCode() {
+      // 旧逻辑保留，避免外部依赖调用报错（不在UI中直接使用）
+      const qrCodeText = "微信二维码链接或相关信息";
+      const container = document.getElementById('qrcode');
+      if (!container) return;
+      QRCode.toCanvas(container, qrCodeText, function (error) {
+        if (error) console.error(error);
+        console.log('二维码生成成功!(旧)');
+      });
+    }
+  </script>
+</body>
+</html>
