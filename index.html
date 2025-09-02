@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 
 <html lang="zh">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>高端赠品学习中心</title>
 <!-- 二维码生成库 -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
@@ -85,7 +86,9 @@
       font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-    }
+    
+  overflow-x: hidden;
+}
     
     .container {
       max-width: 1440px;
@@ -1230,6 +1233,29 @@ footer .footer-content p{
   font-size: 0.88rem;      /* 字体略小，更克制 */
   color: #475569;          /* slate-600，中性灰蓝，显专业 */
 }
+
+/* 手机端字体精修，仅 <=540px 生效 */
+@media (max-width: 540px) {
+  h1 { font-size: 1.15rem; }
+  h2 { font-size: 1.05rem; }
+  h3 { font-size: 1rem; }
+
+  body, p, .card p, .resource-title {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .btn, .btn-primary, .resource-btn {
+    font-size: 0.95rem;
+    line-height: 1.3;
+    min-height: 42px;
+  }
+
+  .header-sub, .hint, footer {
+    font-size: 0.8rem;
+  }
+}
+
 </style>
 
 <!-- 移动端专用补丁：仅在 <=1024px 生效，PC端完全不改变 -->
@@ -1308,6 +1334,127 @@ footer .footer-content p{
   .resource-btn{ min-width: auto; width: 100%; }
 }
 </style>
+<style>
+/* 手机端隐藏滚动条外观，避免出现滚轮导致内容左移；仅移动端生效 */
+@media (max-width: 1024px){
+  /* 全局：不显示滚动条轨道（仍然可以正常滚动） */
+  :root{
+    /* 避免滚动条出现/消失造成的布局抖动 */
+    scrollbar-gutter: stable both-edges;
+  }
+  html, body {
+    -ms-overflow-style: none;  /* IE/Old Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar{      /* Chrome/Safari */
+    width: 0;
+    height: 0;
+    display: none;
+    background: transparent;
+  }
+
+  /* 横向可滑容器：隐藏横向滚动条外观，保留手势滑动 */
+  .nav-wrap, .tabs, .tablist {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .nav-wrap::-webkit-scrollbar,
+  .tabs::-webkit-scrollbar,
+  .tablist::-webkit-scrollbar{
+    width: 0; height: 0; display: none; background: transparent;
+  }
+
+  /* 防止任何子容器强制出现滚动条 */
+  [style*="overflow"], .card-grid, .resource-list {
+    scrollbar-width: none;
+  }
+  [style*="overflow"]::-webkit-scrollbar,
+  .card-grid::-webkit-scrollbar,
+  .resource-list::-webkit-scrollbar{
+    width: 0; height: 0; display: none;
+  }
+}
+</style>
+<!-- App 模式修正：当打包成APP/内置WebView时，避免右侧滚轮导致布局左移 -->
+<style>
+/* 方式A（最推荐）：在 <body> 加 class="app-mode" 即可开启补偿。 */
+/* 仅移动端生效，PC不影响 */
+@media (max-width: 1024px){
+  /* 1) 预留一个稳定的“右边距”来抵消系统滚轮占位（通常 6–12px） */
+  body.app-mode {
+    padding-right: 0px !important; /* 你可以改成 8/12 视机型微调 */
+  }
+  /* 2) 让容器始终居中且不贴边，避免被滚轮覆盖 */
+  .container{
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+  /* 3) 彻底隐藏WebView显示的滚动条外观（仍可滑动） */
+  html, body{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar, body::-webkit-scrollbar{width:0;height:0;display:none}
+  /* 4) 禁止横向滚动，防止内容被“挤歪”出现水平条 */
+  html, body{overflow-x:hidden}
+  /* 5) 避免橡皮筋回弹带来的闪动 */
+  body{overscroll-behavior-y: contain;}
+}
+
+/* —— 顶部安全区适配（刘海/状态栏/模拟器工具条） —— */
+@media (max-width: 1024px){
+  :root{ --safe-top: env(safe-area-inset-top); }
+  /* 给整页预留顶部安全区，避免标题被遮住 */
+  body{ padding-top: max(0px, var(--safe-top, 0px)); }
+  /* 让粘性导航贴在安全区之下 */
+  nav{ top: var(--safe-top, 0px); }
+  /* 头部高度适配，避免和导航重叠 */
+  header{ padding-top: calc(14px + var(--safe-top, 0px)); }
+}
+
+/* 首屏保护距离，防止极端机型/模拟器遮挡 */
+main.container{ margin-top: 4px; }
+
+
+
+/* —— 报名弹窗可滚动优化（仅移动端生效） —— */
+@media (max-width:1024px){
+  .modal{
+    max-height: min(90vh, 720px);
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-header{ flex: 0 0 auto; }
+  .modal-body{
+    flex: 1 1 auto;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(90vh - 120px);
+  }
+  body.modal-open{
+    overflow: hidden !important;
+    touch-action: none;
+  }
+}
+</style>
+
+<script>
+/* 方式B（自动识别尝试）：如果检测到是在App内或小窗口，自动加上 app-mode */
+(function(){
+  try{
+    var isSmall = Math.max(window.innerWidth, document.documentElement.clientWidth) <= 420;
+    var isStandalone = (window.navigator.standalone === true) || window.matchMedia('(display-mode: standalone)').matches;
+    var isAndroidWebView = (/(wv|Android).*AppleWebKit/i).test(navigator.userAgent) && !/Chrome\/\d+/i.test(navigator.userAgent);
+    if(isSmall || isStandalone || isAndroidWebView){
+      document.addEventListener('DOMContentLoaded', function(){
+        document.body.classList.add('app-mode');
+      });
+    }
+  }catch(e){}
+})();
+</script>
+
 </head>
 <body>
 <header>
@@ -1544,5 +1691,37 @@ footer .footer-content p{
       showTab('home');
     });
   </script>
+
+<script>
+// 让“立即报名”弹窗打开时允许内部滚动，同时禁用背景滚动
+(function(){
+  function byId(id){ return document.getElementById(id); }
+  // 包装原方法
+  var _open = window.openEnrollModal;
+  var _close = window.closeEnrollModal;
+
+  window.openEnrollModal = function(){
+    if (typeof _open === 'function') _open();
+    document.body.classList.add('modal-open');
+    // 确保遮罩开启
+    var mask = byId('enrollMask');
+    if (mask){ mask.style.display = 'flex'; }
+  };
+  window.closeEnrollModal = function(){
+    if (typeof _close === 'function') _close();
+    document.body.classList.remove('modal-open');
+    var mask = byId('enrollMask');
+    if (mask){ mask.style.display = 'none'; }
+  };
+
+  // 点击遮罩关闭
+  window.maskClick = function(e){
+    if(e && e.target && e.target.id === 'enrollMask'){
+      window.closeEnrollModal();
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
