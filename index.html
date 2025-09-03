@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 <html lang="zh">
@@ -1720,6 +1721,213 @@ main.container{ margin-top: 4px; }
       window.closeEnrollModal();
     }
   };
+})();
+</script>
+
+
+<!-- 防盗系统（V2 强化版，最小侵入，含右键/快捷键 Toast 提示 & 自动外链弱保护） -->
+<script>
+(function(){
+  'use strict';
+
+  // ===== 配置（可按需调整，不改你原有样式） =====
+  var CONFIG = {
+    legalNotice: '此页面包含受版权保护的内容。仅授权用户可查看与使用。禁止拷贝、抓包、逆向、传播。违者依法追究法律责任。',
+    toastDuration: 2000,
+    lockDuration: 20000,
+    devtoolsCheckInterval: 600,
+    antiDebugInterval: 1200,
+    // 被检测到异常时临时隐藏/模糊的区域（尽量通用，不改变排版）
+    hideSelectors: ['main','.container','#learn','.card-body','.section','.content','[data-sensitive]']
+  };
+
+  var state = { lockedUntil: 0, devtoolsOpen: false, lastTokenTs: 0 };
+
+  function now(){ return Date.now(); }
+  function lockFor(ms){ state.lockedUntil = now() + ms; }
+  function isLocked(){ return now() < state.lockedUntil; }
+
+  // ===== 轻量 Toast（小弹窗提示，不打断操作流） =====
+  function showToast(msg){
+    try{
+      var wrap = document.getElementById('anti-toast-wrap');
+      if(!wrap){
+        wrap = document.createElement('div');
+        wrap.id = 'anti-toast-wrap';
+        wrap.style.position = 'fixed';
+        wrap.style.top = '14px';
+        wrap.style.left = '50%';
+        wrap.style.transform = 'translateX(-50%)';
+        wrap.style.zIndex = '2147483647';
+        wrap.style.pointerEvents = 'none';
+        document.body.appendChild(wrap);
+      }
+      var item = document.createElement('div');
+      item.textContent = msg;
+      item.style.cssText = 'margin-top:8px;padding:8px 12px;background:rgba(0,0,0,.78);color:#fff;font-size:13px;border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.2);pointer-events:none;transition:opacity .25s ease;';
+      wrap.appendChild(item);
+      setTimeout(function(){ item.style.opacity = '0'; setTimeout(function(){ item.remove(); }, 250); }, CONFIG.toastDuration);
+    }catch(_){}
+  }
+
+  // ===== 法律告知遮罩（只在异常时弹一次） =====
+  function showLegalMask(){
+    var mask = document.getElementById('anti-legal-mask');
+    if(mask){ mask.style.display='flex'; return; }
+    mask = document.createElement('div');
+    mask.id = 'anti-legal-mask';
+    mask.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(2px);z-index:2147483646;';
+    mask.innerHTML = '<div style="max-width:720px;background:#111;color:#fff;border-radius:16px;padding:18px 20px;line-height:1.65;box-shadow:0 16px 48px rgba(0,0,0,.35)">'+
+      '<div style="font-weight:800;font-size:18px;margin-bottom:6px;">安全警告 / Legal Notice</div>'+
+      '<div style="opacity:.95;font-size:14px;">'+ CONFIG.legalNotice.replace(/</g,'&lt;') +'</div>'+
+      '<div style="margin-top:10px;opacity:.7;font-size:12px;">系统检测到可疑调试/抓取行为（如打开开发者工具、查看源代码、复制敏感内容等）。已临时保护内容。</div>'+
+      '<div style="margin-top:14px;text-align:right;"><button id="anti-legal-ok" style="background:#16a34a;border:none;color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer">我已知悉</button></div>'+
+    '</div>';
+    document.body.appendChild(mask);
+    document.getElementById('anti-legal-ok').addEventListener('click', function(){ mask.style.display='none'; });
+  }
+
+  // ===== 临时隐藏关键区域（不更改布局，只做可视隐藏/模糊） =====
+  function hideSensitiveAreas(hide){
+    CONFIG.hideSelectors.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        el.style.visibility = hide ? 'hidden' : '';
+        el.style.filter = hide ? 'blur(8px)' : '';
+        el.style.pointerEvents = hide ? 'none' : '';
+      });
+    });
+  }
+
+  // ===== DevTools 检测（尺寸 + 时间陷阱） =====
+  function checkDevtools(){
+    var threshold = 160;
+    var bySize = (window.outerWidth - window.innerWidth > threshold) || (window.outerHeight - window.innerHeight > threshold);
+    var t0 = performance.now();
+    // eslint-disable-next-line no-debugger
+    debugger;
+    var cost = performance.now() - t0;
+    var opened = bySize || cost > 200;
+    if(opened && !state.devtoolsOpen){
+      state.devtoolsOpen = true;
+      lockFor(CONFIG.lockDuration);
+      hideSensitiveAreas(true);
+      console.clear();
+      showLegalMask();
+      showToast('已启用安全保护：请关闭开发者工具');
+    }else if(!opened && state.devtoolsOpen && !isLocked()){
+      state.devtoolsOpen = false;
+      hideSensitiveAreas(false);
+    }
+  }
+  setInterval(checkDevtools, CONFIG.devtoolsCheckInterval);
+
+  // ===== Anti-Debug 干扰 =====
+  (function antiDebugLoop(){
+    try{
+      Function('debugger')();
+      if(isLocked()){ setTimeout(antiDebugLoop, 300); return; }
+    }catch(e){}
+    setTimeout(antiDebugLoop, CONFIG.antiDebugInterval);
+  })();
+
+  // ===== 自动外链弱保护：把 a[href^=http] 改为混淆点击（不改变样式，不需要你手动加 data-protect） =====
+  function autoProtectLinks(){
+    document.querySelectorAll('a[href^="http"]').forEach(function(a){
+      if(a.dataset.noprotect || a.dataset._protected) return;
+      var real = a.getAttribute('href');
+      a.dataset._protected = '1';
+      a.dataset.real = real;
+      a.setAttribute('rel', (a.getAttribute('rel')||'') + ' noopener noreferrer');
+      a.setAttribute('href', 'javascript:void 0');
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        // 轻量 Token（仅混淆/延迟，非严格加密）
+        var ts = Math.floor(Date.now()/1000);
+        if(state.lastTokenTs && (ts - state.lastTokenTs) < 1){ return; }
+        state.lastTokenTs = ts;
+        var salt = btoa(real + '|' + ts).replace(/=+$/,'');
+        setTimeout(function(){
+          try{
+            var url = new URL(real, location.href);
+            url.hash = '#t=' + ts + '&sig=' + salt;
+            window.open(url.toString(), '_blank', 'noopener,noreferrer');
+          }catch(_){
+            window.open(real, '_blank', 'noopener,noreferrer');
+          }
+        }, 150 + Math.floor(Math.random()*200));
+      }, true);
+    });
+  }
+
+  // ===== 右键/复制/查看源代码/打印等常见操作的提示与软拦截 =====
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); showToast('已禁止右键'); }, true);
+  document.addEventListener('selectstart', function(e){ /* 可选择性禁止选择：如果影响体验可注释 */ }, true);
+  document.addEventListener('copy', function(e){
+    e.preventDefault();
+    try{ e.clipboardData.setData('text/plain','已启用防复制 · '+ location.host +' · '+ new Date().toISOString()); }catch(_){}
+    showToast('已禁止复制');
+  }, true);
+
+  document.addEventListener('keydown', function(e){
+    var k = e.key.toLowerCase();
+    var ctrl = e.ctrlKey || e.metaKey;
+    var shift = e.shiftKey;
+    if(k==='f12' || (ctrl && shift && (k==='i' || k==='j' || k==='c'))){ // devtools
+      e.preventDefault();
+      lockFor(CONFIG.lockDuration);
+      hideSensitiveAreas(true);
+      showLegalMask();
+      showToast('已阻止调试操作');
+    }
+    if(ctrl && (k==='u')){ // 查看源代码
+      e.preventDefault();
+      showToast('已禁止查看源代码');
+    }
+    if(ctrl && (k==='s' || k==='p')){ // 保存/打印
+      e.preventDefault();
+      showToast(k==='s' ? '已禁止保存页面' : '已禁止打印');
+    }
+  }, true);
+
+  // 打印拦截：仅显示提示
+  var printStyle = document.createElement('style');
+  printStyle.textContent = '@media print { body * { visibility: hidden !important; } }';
+  document.head.appendChild(printStyle);
+
+  // 防被 iframe 内嵌（扒站器常用）
+  function bustFrame(){
+    try{ if(window.top !== window.self){ document.body.innerHTML = ''; window.top.location = window.location.href; } }catch(_){}
+  }
+
+  // DOM 注入监控：若新增 script/iframe，触发保护
+  function mountMutationGuard(){
+    var ob = new MutationObserver(function(muts){
+      var bad = false;
+      muts.forEach(function(m){
+        m.addedNodes && m.addedNodes.forEach(function(n){
+          if(n.nodeType===1){
+            var t=n.tagName.toLowerCase();
+            if(t==='script'||t==='iframe'){ bad = true; }
+          }
+        });
+      });
+      if(bad){
+        lockFor(CONFIG.lockDuration);
+        hideSensitiveAreas(true);
+        showLegalMask();
+        showToast('已阻止可疑注入');
+      }
+    });
+    ob.observe(document.documentElement, { childList:true, subtree:true });
+  }
+
+  // 初始化
+  function init(){
+    bustFrame();
+    autoProtectLinks();
+    mountMutationGuard();
+  }
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); } else { init(); }
 })();
 </script>
 
