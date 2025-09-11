@@ -342,8 +342,10 @@
 <div class="card">
 <div class="section-title">提示词 <span class="tag">分享区</span><div class="section-search"></div></div>
 <div class="btns" data-numbered="true" id="promptList">
-<a class="btn" href="#" rel="noopener" target="_blank">示例提示词 1</a>
-<a class="btn" href="#" rel="noopener" target="_blank">示例提示词 2</a>
+<a class="btn" data-nav="true" href="#dajuprompt">大橘制作视频</a>
+
+
+
 </div>
 <div style="height:10px"></div>
 </div>
@@ -376,6 +378,62 @@
 </div>
 </div>
 </section>
+
+<!-- 大橘制作视频 提示词页面 -->
+<section aria-labelledby="dajuprompt-tab" class="section page" id="dajuprompt">
+<div class="wrap">
+<div class="card">
+<div class="section-title">大橘制作视频 <span class="tag">提示词</span></div>
+
+<pre id="dajupromptText" style="white-space:pre-wrap;line-height:1.6;font-size:14px;background:rgba(255,255,255,.05);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);">
+接下来我要分段描述故事，请将生成的图片包含以下关键点:超级逼真的风格，猫咪表情和动作拟人化，夸张的手法
+
+大橘常年在外面工地上班
+大橘下班后，独自在出租屋吃外卖
+晚上大橘自己做家务，洗衣服
+第二天大橘收到过年放假通知
+晚上大橘接到妈妈关心的电话让小橘回家过年
+夜里，大橘猫梦见了妈妈
+早上大橘早早到了火车站
+火车上，大橘很期待见到家人
+妈妈早早在门口等候，见到大橘很开心
+晚上，大橘一家吃着年夜饭
+饭后，大家一起幸福地看着烟花
+</pre>
+
+<!-- 复制按钮和返回按钮 -->
+<div class="btns" style="margin-top:12px;grid-template-columns: repeat(2, minmax(0,1fr));">
+  <button class="btn accent" id="copyDaju">📋 复制提示词</button>
+  <a class="btn brand" data-nav="true" href="#prompts">返回提示词</a>
+</div>
+
+<script>
+  // 大橘提示词复制功能
+  const copyDaju = document.getElementById('copyDaju');
+  const dajuText = document.getElementById('dajupromptText');
+  if(copyDaju && dajuText){
+    copyDaju.addEventListener('click', async ()=>{
+      const text = dajuText.innerText.trim();
+      try{
+        await navigator.clipboard.writeText(text);
+        copyDaju.textContent = '已复制 ✅';
+        setTimeout(()=> copyDaju.textContent = '📋 复制提示词', 1600);
+      }catch(e){
+        // 备用方案
+        const h = document.createElement('textarea');
+        h.value = text; document.body.appendChild(h); h.select();
+        try{ document.execCommand('copy'); copyDaju.textContent='已复制 ✅'; }
+        catch{ alert('复制失败，请手动复制'); }
+        finally{ document.body.removeChild(h); setTimeout(()=> copyDaju.textContent='📋 复制提示词', 1600); }
+      }
+    });
+  }
+</script>
+
+</div>
+</div>
+</section>
+
 </main>
 <!-- 底部声明（和GPT一样放在最底部） -->
 <footer>
