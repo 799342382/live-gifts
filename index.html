@@ -222,7 +222,17 @@
 }
 .btn[data-hidden="1"]{ display:none !important; }
 .btn .num-prefix{ color:#a6c4ff; margin-right:6px; }
-</style></head>
+</style>
+<style>
+/* 清除按钮触控友好（增强移动端） */
+#searchClear{ padding:10px; border-radius:50%; }
+@media (max-width:680px){
+  #searchClear{ right:6px; font-size:18px; padding:12px; }
+  #searchBox{ padding-right:44px; /* 给清除钮留空间 */ }
+}
+</style>
+
+</head>
 <body>
 <!-- 顶部导航：按钮一行可滑动（带可视按区） -->
 <div class="nav">
@@ -370,9 +380,10 @@
 <div class="wrap">
 <div class="card">
 <div class="section-title">我的 <span class="tag">我的</span><div class="section-search"></div></div>
-<p class="note">目前仅保留 <b>APP下载</b> 按钮，其他功能后续再开启。</p>
+<p class="note">目前仅保留 <b>APP下载</b> 按钮，网页版按钮，其他功能后续再开启。</p>
 <div class="btns" data-numbered="true">
 <a class="btn accent" href="https://github.com/799342382/AI-Toolbox/releases/download/%E5%AE%89%E8%A3%85/AI.apk" id="appLink" rel="noopener" target="_blank">APP下载</a>
+  <a class="btn brand" href="https://799342382.github.io/live-gifts/#home" rel="noopener" target="_blank">网页版</a>
 </div>
 <div style="height:10px"></div>
 </div>
@@ -798,6 +809,108 @@ document.addEventListener('click', function(e){
   window.renumberSections = function(){
     containers.forEach(applyNumbers);
   };
+})();
+</script>
+<script>
+/* ====== 移动端搜索增强（不改动原有逻辑，只做补强） ====== */
+(function(){
+  if (window.__MOBILE_SEARCH_PATCH__) return;
+  window.__MOBILE_SEARCH_PATCH__ = true;
+
+  const searchBox = document.getElementById('searchBox');
+  const noHint = document.getElementById('noSearchHint');
+  if(!searchBox) return;
+
+  // UI: 右侧清除按钮
+  (function createClearBtn(){
+    const wrapper = searchBox.parentElement || searchBox;
+    if (!wrapper) return;
+    if (getComputedStyle(wrapper).position === 'static') {
+      wrapper.style.position = 'relative';
+    }
+    const clearBtn = document.createElement('button');
+    clearBtn.id = 'searchClear';
+    clearBtn.type = 'button';
+    clearBtn.title = '清除';
+    clearBtn.innerText = '✕';
+    Object.assign(clearBtn.style, {
+      display: 'none',
+      position: 'absolute',
+      right: '8px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      border: 'none',
+      background: 'transparent',
+      color: '#cfe7ff',
+      fontSize: '16px',
+      padding: '8px',
+      cursor: 'pointer',
+      zIndex: 60,
+      WebkitTapHighlightColor: 'transparent',
+    });
+    wrapper.appendChild(clearBtn);
+
+    clearBtn.addEventListener('click', ()=>{
+      searchBox.value='';
+      // 触发原有逻辑：手动触发 input 事件
+      searchBox.dispatchEvent(new Event('input', {bubbles:true}));
+      searchBox.focus();
+      clearBtn.style.display='none';
+    }, {passive:true});
+
+    clearBtn.addEventListener('touchstart', (e)=>{ e.stopPropagation(); }, {passive:true});
+
+    // 跟随输入显隐
+    function toggleClear(){
+      clearBtn.style.display = searchBox.value.trim() ? '' : 'none';
+    }
+    searchBox.addEventListener('input', toggleClear);
+    searchBox.addEventListener('focus', toggleClear);
+    searchBox.addEventListener('blur', toggleClear);
+  })();
+
+  // “无结果时自动清空”的稳固实现（不干扰有结果场景）
+  let blurClearTimer = null;
+  function shouldShowNoResult(){
+    // 如果页面里显示了你原本的“无结果提示”元素，就认为是无结果
+    return noHint && noHint.style && noHint.style.display !== 'none';
+  }
+
+  // 失焦时：若无结果则立即清空
+  searchBox.addEventListener('blur', ()=>{
+    if (searchBox.value && shouldShowNoResult()){
+      searchBox.value='';
+      searchBox.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+  });
+
+  // 软键盘收起检测：visualViewport 变化时
+  if (window.visualViewport){
+    let lastH = window.visualViewport.height;
+    window.visualViewport.addEventListener('resize', ()=>{
+      const nowH = window.visualViewport.height;
+      const keyboardClosing = nowH > lastH + 80;
+      if (document.activeElement !== searchBox && keyboardClosing && searchBox.value && shouldShowNoResult()){
+        // 键盘刚收起且无结果 => 清空
+        clearTimeout(blurClearTimer);
+        blurClearTimer = setTimeout(()=>{
+          searchBox.value='';
+          searchBox.dispatchEvent(new Event('input', {bubbles:true}));
+        }, 0);
+      }
+      lastH = nowH;
+    });
+  }
+
+  // ESC 快捷：在桌面或外接键盘也同样可用
+  window.addEventListener('keydown', (e)=>{
+    const active = document.activeElement;
+    const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+    if(e.key === 'Escape' && isTyping && active === searchBox){
+      searchBox.value='';
+      searchBox.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+  });
 })();
 </script>
 </body>
