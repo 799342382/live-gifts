@@ -1071,5 +1071,51 @@ font-size:14px;line-height:1;opacity:0;pointer-events:none;transition:.18s ease;
 })();
 </script>
 
+
+<!-- 留言功能注入 -->
+<style>
+#guestbook-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:9999}
+#guestbook-modal .box{width:360px;max-width:92%;background:#111;color:#fff;border-radius:12px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+#guestbook-modal input,#guestbook-modal textarea{width:100%;margin:8px 0;padding:10px;border-radius:8px;border:1px solid #333;background:#1b1b1b;color:#fff}
+#guestbook-modal button{width:100%;padding:10px;border-radius:8px;border:none;background:#6b5cff;color:#fff}
+#guestbook-modal .close{margin-top:8px;background:#333}
+</style>
+<div id="guestbook-modal">
+  <div class="box">
+    <h3>站点留言</h3>
+    <input id="gb-name" placeholder="你的称呼"/>
+    <input id="gb-email" placeholder="联系方式（选填）"/>
+    <textarea id="gb-msg" rows="4" placeholder="留言内容"></textarea>
+    <button id="gb-submit">提交留言</button>
+    <button class="close" onclick="GB.close()">关闭</button>
+  </div>
+</div>
+<script>
+const GB={
+ open(){document.getElementById('guestbook-modal').style.display='flex'},
+ close(){document.getElementById('guestbook-modal').style.display='none'},
+ init(){
+   // 隐藏包含邮箱提示的文字，避免信息暴露
+   document.querySelectorAll('*').forEach(el=>{
+     if(el.children.length===0 && el.textContent && el.textContent.includes('邮箱')){
+       el.textContent='';
+     }
+   });
+   // 在“复制链接”右侧插入按钮
+   const btns=[...document.querySelectorAll('button,a')];
+   const copyBtn=btns.find(b=>b.textContent && b.textContent.includes('复制'));
+   if(copyBtn){
+     const b=document.createElement(copyBtn.tagName);
+     b.textContent='站点留言';
+     b.style.marginLeft='8px';
+     b.onclick=()=>GB.open();
+     copyBtn.parentNode.insertBefore(b, copyBtn.nextSibling);
+   }
+ }
+};
+document.addEventListener('DOMContentLoaded',GB.init);
+</script>
+
 </body>
 </html>
+
