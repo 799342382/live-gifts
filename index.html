@@ -1173,58 +1173,5 @@ font-size:14px;line-height:1;opacity:0;pointer-events:none;transition:.18s ease;
 })();
 </script>
 
-
-<script>
-/* —— 微信级·单页滑动（不删任何功能｜一次手势=一页） —— */
-(function(){
-  let sx=0, sy=0, locked=false, startTime=0;
-  const TH=16, ANGLE=120, COOLDOWN=420;
-
-  function pages(){ return Array.from(document.querySelectorAll('.page')); }
-  function currentIndex(){
-    const ps=pages();
-    return ps.findIndex(p=>p.classList.contains('active'));
-  }
-
-  document.addEventListener('touchstart', e=>{
-    const t=e.touches[0];
-    sx=t.pageX; sy=t.pageY;
-    locked=false;
-    startTime=Date.now();
-  }, {passive:true});
-
-  document.addEventListener('touchmove', e=>{
-    const t=e.touches[0];
-    if(Math.abs(t.pageX-sx) > Math.abs(t.pageY-sy)){
-      e.preventDefault();
-    }
-  }, {passive:false});
-
-  document.addEventListener('touchend', e=>{
-    if(locked) return;
-    if(Date.now()-startTime < 40) return;
-
-    const t=e.changedTouches[0];
-    const dx=t.pageX-sx, dy=t.pageY-sy;
-
-    if(Math.abs(dx)>=TH && Math.abs(dy)<=ANGLE){
-      const ps=pages();
-      const cur=currentIndex();
-      if(cur<0) return;
-
-      let target=cur;
-      if(dx<0 && cur<ps.length-1) target=cur+1;
-      if(dx>0 && cur>0) target=cur-1;
-
-      if(target!==cur){
-        locked=true;
-        location.hash='#'+ps[target].id;
-        setTimeout(()=>locked=true, COOLDOWN);
-      }
-    }
-  }, {passive:true});
-})();
-</script>
-
 </body>
 </html>
