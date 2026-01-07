@@ -1199,20 +1199,24 @@ font-size:14px;line-height:1;opacity:0;pointer-events:none;transition:.18s ease;
 
 
 <script>
-/* —— 页面左右滑动增强（微信级手感） —— */
+
+/* —— 页面左右滑动增强（微信级手感｜一次只切一页） —— */
 (function(){
   let startX = 0;
   let startY = 0;
-  const threshold = 18; // 更小 = 更灵敏
+  let locked = false; // 核心：一次滑动只允许切换一页
+  const threshold = 18;
   const restraint = 120;
 
   document.addEventListener('touchstart', function(e){
     const t = e.touches[0];
     startX = t.pageX;
     startY = t.pageY;
+    locked = false;
   }, {passive:true});
 
   document.addEventListener('touchend', function(e){
+    if (locked) return;
     const t = e.changedTouches[0];
     const distX = t.pageX - startX;
     const distY = t.pageY - startY;
@@ -1224,16 +1228,17 @@ font-size:14px;line-height:1;opacity:0;pointer-events:none;transition:.18s ease;
       if (current === -1) return;
 
       let target = current;
-      if (distX < 0 && current < pages.length - 1) target++;
-      if (distX > 0 && current > 0) target--;
+      if (distX < 0 && current < pages.length - 1) target = current + 1;
+      if (distX > 0 && current > 0) target = current - 1;
 
-      const targetTab = tabs.find(t => t.dataset.tab === pages[target].id);
-      if (targetTab){
+      if (target !== current){
+        locked = true; // 锁住，防止一次滑动连跳
         location.hash = '#' + pages[target].id;
       }
     }
   }, {passive:true});
 })();
+
 </script>
 
 
