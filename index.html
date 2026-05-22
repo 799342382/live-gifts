@@ -997,12 +997,14 @@
                   <div class="courseBodyTitle">学习内容</div>
                   
                   <ul class="courseList">
-                    <li>AI 趋势认知</li>
-                    <li>六大变现赛道</li>
-                    <li>个人能力升级</li>
-                    <li>AI 成交方法</li>
-                    <li>影响力打造</li>
-                    <li>长期价值构建</li>
+                    <li>AI 变现六大赛道</li>
+                    <li>一人顶一个团队</li>
+                    <li>AI 写爆款文案</li>
+                    <li>AI 打造个人 IP</li>
+                    <li>本地商家 AI 引流</li>
+                    <li>AI 生成直播脚本</li>
+                    <li>企业 AI 降本增效</li>
+                    <li>选对赛道快变现</li>
                   </ul>
                   <div class="courseNote">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -1234,6 +1236,21 @@
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <div class="overlay" id="linkSelectorOv">
+    <div class="dialog">
+      <div class="dlgHead">
+        <p class="dlgTitle">请选择下载通道</p>
+        <button class="xBtn" id="xLinkSelector">✕</button>
+      </div>
+      <div class="dlgBody" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+        <button class="btnPrimary" onclick="openSelected('https://snapany.com/zh')">通道 1 (SnapAny)</button>
+        <button class="btnPrimary" onclick="openSelected('https://snapwc.com/zh')">通道 2 (SnapWC)</button>
+        <button class="btnPrimary" onclick="openSelected('https://greenvideo.cc/')">通道 3 (GreenVideo)</button>
+        <button class="btnPrimary" onclick="openSelected('https://orbitdownloader.com/')">通道 4 (Orbit)</button>
+      </div>
+    </div>
+  </div>
 
   <div class="overlay" id="detailsOv">
     <div class="dialog" role="dialog" aria-modal="true" aria-label="招聘详情">
@@ -1477,6 +1494,20 @@ document.addEventListener('copy', function(e) {
 
   function isGold(){ return localStorage.getItem(KEY_GOLD) === "1"; }
 
+  // --- 下载选择器逻辑 ---
+  function openLinkSelector(){
+      $("linkSelectorOv").classList.add("show");
+  }
+  function closeLinkSelector(){
+      $("linkSelectorOv").classList.remove("show");
+  }
+  window.openSelected = function(url){
+      openUrl(url);
+      closeLinkSelector();
+  };
+  $("xLinkSelector").addEventListener("click", closeLinkSelector);
+  $("linkSelectorOv").addEventListener("click", (e)=>{ if(e.target === $("linkSelectorOv")) closeLinkSelector(); });
+
   // 渲染会员界面的样式更新函数
   function paintMember(){
     const gold = isGold();
@@ -1599,7 +1630,13 @@ document.addEventListener('copy', function(e) {
 
           return;
         }
-        openUrl(item.url);
+        
+        // 特殊处理无水印下载
+        if(item.id === 1){
+            openLinkSelector();
+        } else {
+            openUrl(item.url);
+        }
       });
 
       grid.appendChild(el);
@@ -1691,7 +1728,13 @@ document.addEventListener('copy', function(e) {
 
           return;
         }
-        openUrl(item.url);
+        
+        // 特殊处理无水印下载
+        if(item.id === 1){
+            openLinkSelector();
+        } else {
+            openUrl(item.url);
+        }
       });
 
       grid.appendChild(el);
@@ -2185,7 +2228,7 @@ document.addEventListener('copy', function(e) {
   bind("navGold","gold");
   bind("navMy","my");
 
-  // 分享 / 下载链接（可直接替换成你的新地址）
+  // 分享 / 下载链接
   const APK_URL = "https://github.com/799342382/AI-Toolbox/releases/download/%E5%AE%89%E8%A3%85/AI.apk";
   const WEB_URL = "https://799342382.github.io/live-gifts/";
 
