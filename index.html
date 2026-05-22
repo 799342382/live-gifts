@@ -190,6 +190,9 @@
       gap:8px;
     }
 
+    /* 禁用态按钮 */
+    button:disabled{ cursor:not-allowed !important; opacity:.70; }
+
     .panel{
       margin-top:14px;
       padding:14px;
@@ -209,7 +212,91 @@
     .grid{ display:grid; grid-template-columns:1fr; gap: var(--gap); }
     @media (max-width: 820px){ .grid{ grid-template-columns:1fr; } }
 
-    /* 工具条 */
+    /* 搜索框 */
+    .searchBox{
+      margin-bottom: var(--gap);
+      padding:12px;
+      border-radius:22px;
+      background:rgba(255,255,255,.76);
+      border:1px solid rgba(255,255,255,.84);
+      box-shadow:0 12px 30px rgba(22,25,38,.08);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .searchIcon{
+      width:34px;height:34px;border-radius:14px;
+      display:grid;place-items:center;
+      background:rgba(31,36,48,.06);
+      color:rgba(31,36,48,.70);
+      flex:0 0 auto;
+      font-weight:1100;
+    }
+    .searchInput{
+      flex:1;
+      border:0;
+      outline:none;
+      background:transparent;
+      font-size:14px;
+      color:var(--text);
+      min-width:0;
+    }
+    .searchInput::placeholder{ color: rgba(31,36,48,.35); }
+    .searchClear{
+      width:34px;height:34px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.86);
+      background:rgba(255,255,255,.72);
+      box-shadow:0 10px 24px rgba(22,25,38,.08);
+      cursor:pointer;
+      color:rgba(31,36,48,.70);
+      font-weight:1100;
+      display:none;
+      flex:0 0 auto;
+    }
+    .searchClear.show{ display:grid; place-items:center; }
+    .emptyState{
+      padding: 18px 12px;
+      text-align:center;
+      color: rgba(31,36,48,.55);
+      font-size: 13px;
+      font-weight: 1000;
+    }
+
+    
+    /* 全局搜索结果模式（一个搜索框，搜全站工具） */
+    .panel.searching .view{ display:none !important; }
+    .panel.searching #viewSearch{ display:block !important; }
+
+    .toolMeta{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .tierTag{
+      flex:0 0 auto;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 1100;
+      background: rgba(31,36,48,.06);
+      color: rgba(31,36,48,.78);
+      border: 1px solid rgba(31,36,48,.06);
+      user-select:none;
+    }
+    .tierTag.diamond{
+      background: rgba(74,218,255,.10);
+      border-color: rgba(74,218,255,.18);
+      color: rgba(46,90,140,.92);
+    }
+    .tierTag.gold{
+      background: rgba(158,158,158,.15);
+      border-color: rgba(158,158,158,.25);
+      color: rgba(80,80,80,.95);
+    }
+/* 工具条 */
     .tool{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
       padding:14px;border-radius:22px;
@@ -419,6 +506,73 @@
       overflow:hidden;
     }
 
+    /* 分享与下载 */
+    .shareGrid{
+      display:grid;
+      gap: 12px;
+    }
+    .shareItem{
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(255,255,255,.84);
+      box-shadow: 0 12px 30px rgba(22,25,38,.08);
+      overflow:hidden;
+    }
+    .shareHead{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:12px;
+    }
+    .shareLeft{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .shareIcon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:20px;
+      font-weight:1100;
+      color:#fff;
+      box-shadow: 0 10px 24px rgba(22,25,38,.12);
+      flex: 0 0 auto;
+    }
+    .shareText{ min-width:0; }
+    .shareName{
+      font-weight:1100;
+      font-size:15px;
+      line-height:1.15;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .shareDesc{
+      margin-top:4px;
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .shareUrl{
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(31,36,48,.03);
+      border: 1px solid rgba(31,36,48,.06);
+      color: rgba(31,36,48,.72);
+      font-size: 12px;
+      line-height: 1.4;
+      word-break: break-all;
+    }
+
+
     /* 会员中心 */
     .memCard{position:relative; overflow:hidden;}
     .memCard::before{
@@ -469,8 +623,8 @@
 
     @keyframes pulseGlow {
       0% { box-shadow: 0 8px 24px rgba(22,25,38,.04); border-color: rgba(31,36,48,.06); transform: scale(1); }
-      30% { box-shadow: 0 0 0 6px rgba(255,170,0,.25); border-color: #FFAA00; transform: scale(1.02); }
-      70% { box-shadow: 0 0 0 6px rgba(255,170,0,.25); border-color: #FFAA00; transform: scale(1.02); }
+      30% { box-shadow: 0 0 0 6px rgba(158,158,158,.25); border-color: #9E9E9E; transform: scale(1.02); }
+      70% { box-shadow: 0 0 0 6px rgba(158,158,158,.25); border-color: #9E9E9E; transform: scale(1.02); }
       100% { box-shadow: 0 8px 24px rgba(22,25,38,.04); border-color: rgba(31,36,48,.06); transform: scale(1); }
     }
     .pulse-highlight .input-group {
@@ -700,136 +854,6 @@
 
     /* ========================================= */
     /* 全新升级：杂志级排版的唯美浅色启动屏      */
-    /* ========================================= */
-    .splash-ad {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      background: linear-gradient(135deg, #f5efff, #eef5ff);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .splash-ad.hide {
-      opacity: 0;
-      transform: scale(1.05);
-      pointer-events: none;
-    }
-    
-    /* 高级艺术光晕背景 */
-    .splash-ad::before {
-      content: ""; position: absolute; top: -10%; left: -20%; width: 80vw; height: 80vw;
-      background: radial-gradient(circle, rgba(157,86,255,0.18) 0%, rgba(255,255,255,0) 70%);
-      filter: blur(60px); z-index: 0; animation: floatA 12s infinite alternate ease-in-out;
-    }
-    .splash-ad::after {
-      content: ""; position: absolute; bottom: -10%; right: -20%; width: 90vw; height: 90vw;
-      background: radial-gradient(circle, rgba(74,218,255,0.18) 0%, rgba(255,255,255,0) 70%);
-      filter: blur(60px); z-index: 0; animation: floatB 15s infinite alternate-reverse ease-in-out;
-    }
-    @keyframes floatA { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40px, 30px) scale(1.1); } }
-    @keyframes floatB { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-40px, -30px) scale(1.15); } }
-
-    .splash-header {
-      position: absolute;
-      top: calc(20px + var(--safeT));
-      right: 20px;
-      z-index: 10;
-    }
-    .skip-btn {
-      background: rgba(255, 255, 255, 0.7);
-      color: rgba(31, 36, 48, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 1100;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(22, 25, 38, 0.05);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: all 0.2s ease;
-    }
-    .skip-btn:active { transform: scale(0.95); }
-    
-    .splash-body {
-      z-index: 2; width: 100%; max-width: 440px; padding: 0 24px; text-align: center;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-
-    /* 艺术感顶部文案 */
-    .s-english-accent {
-      font-size: 12px; font-weight: 1100; letter-spacing: 4px; color: #9d56ff;
-      margin-bottom: 12px; text-transform: uppercase;
-      transform: translateY(20px); opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.1s;
-    }
-    .s-giant-title {
-      font-size: 64px; font-weight: 1100; letter-spacing: 8px; margin: 0 0 16px 0;
-      background: linear-gradient(135deg, #7a5cf5 0%, #4adaff 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-shadow: 0 10px 30px rgba(157, 86, 255, 0.15);
-      transform: translateY(20px); opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
-    }
-    .s-sub-title {
-      font-size: 16px; font-weight: 900; color: rgba(31,36,48, 0.75); margin-bottom: 40px;
-      letter-spacing: 1px;
-      transform: translateY(20px); opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
-    }
-
-    /* 精致的毛玻璃职位卡片 */
-    .s-jobs-container {
-      display: flex; gap: 16px; margin-bottom: 40px; justify-content: center; width: 100%;
-      transform: translateY(20px); opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
-    }
-    .s-job-card {
-      flex: 1; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.9);
-      padding: 24px 16px; border-radius: 24px; box-shadow: 0 16px 40px rgba(22, 25, 38, 0.05);
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    }
-    .s-job-icon {
-      width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; font-size: 24px;
-      box-shadow: 0 12px 24px rgba(22,25,38,0.08);
-    }
-    .s-job-name { font-size: 15px; font-weight: 1100; color: var(--text); }
-
-    /* 高级要求区 */
-    .s-intro-panel {
-      width: 100%; background: transparent; text-align: left; margin-bottom: 40px;
-      transform: translateY(20px); opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
-    }
-    .s-intro-item { 
-      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; 
-      font-size: 14px; color: rgba(31,36,48,0.7); line-height: 1.5; 
-    }
-    .s-intro-item:last-child { margin-bottom: 0; }
-    .s-intro-item strong { color: var(--text); font-weight: 1100; }
-    .s-intro-icon { 
-      flex: 0 0 auto; margin-top: 2px; width: 20px; height: 20px; 
-      border-radius: 50%; display: grid; place-items: center; font-size: 12px;
-      background: rgba(255,255,255,0.7); box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    }
-
-    /* 艺术呼吸按钮 */
-    .s-action-btn {
-      width: 100%; background: linear-gradient(135deg, #9d56ff 0%, #4adaff 100%);
-      color: #fff; font-size: 16px; font-weight: 1100; padding: 18px; border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 16px 36px rgba(157, 86, 255, 0.25); 
-      cursor: pointer; position: relative; overflow: hidden; letter-spacing: 1px;
-      transform: translateY(20px); opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s;
-    }
-    .s-action-btn::after {
-      content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
-      transform: skewX(-20deg); animation: sweep 3s infinite ease-in-out;
-    }
-
-    @keyframes slideUpFade { to { transform: translateY(0); opacity: 1; } }
-    @keyframes sweep { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
-
     /* 弹窗 */
     .overlay{ position:fixed; inset:0; background: rgba(16,18,24,.38); display:none; align-items:center; justify-content:center; padding:16px; z-index:100; }
     .overlay.show{ display:flex; }
@@ -917,48 +941,6 @@
 </head>
 <body>
 
-  <div id="splashAd" class="splash-ad">
-    <div class="splash-header">
-      <button id="skipAdBtn" class="skip-btn">跳过 4s</button>
-    </div>
-    
-    <div class="splash-body">
-      
-      <div class="s-english-accent">We Are Hiring</div>
-      <div class="s-giant-title">招聘</div>
-      <div class="s-sub-title">张易发 · 寻找核心战友</div>
-      
-      <div class="s-jobs-container">
-        <div class="s-job-card">
-          <div class="s-job-icon" style="background:linear-gradient(135deg, rgba(157,86,255,.95), rgba(74,218,255,.85)); color:#fff;">🎬</div>
-          <div class="s-job-name">剪辑操盘手</div>
-        </div>
-        <div class="s-job-card">
-          <div class="s-job-icon" style="background:linear-gradient(135deg, rgba(255,178,56,.95), rgba(255,92,140,.85)); color:#fff;">☎️</div>
-          <div class="s-job-name">电话销售</div>
-        </div>
-      </div>
-      
-      <div class="s-intro-panel">
-        <div class="s-intro-item">
-          <div class="s-intro-icon">💡</div>
-          <div><strong>无惧经验：</strong>接受潜力新人，提供顶级实战培养体系。</div>
-        </div>
-        <div class="s-intro-item">
-          <div class="s-intro-icon">🔥</div>
-          <div><strong>实力进阶：</strong>经验丰富者直接参与核心业务线转化。</div>
-        </div>
-        <div class="s-intro-item">
-          <div class="s-intro-icon" style="color: #ff5c8c;">⛔</div>
-          <div><strong style="color: #ff5c8c;">底层红线：</strong>坚决拒绝没有爱心、缺乏同理心的人。</div>
-        </div>
-      </div>
-      
-      <button class="s-action-btn" id="splashActionBtn">立即报名 / 投递简历</button>
-      
-    </div>
-  </div>
-
   <div class="shell" id="shell">
     <div class="frame">
 
@@ -976,6 +958,18 @@
       </header>
 
       <div class="panel">
+        <div class="searchBox" id="globalSearchBox">
+          <div class="searchIcon">🔎</div>
+          <input id="searchAll" class="searchInput" autocomplete="off" inputmode="text" placeholder="搜索全部功能（名称/序号）" />
+          <button class="searchClear" id="clearAll" type="button" aria-label="清空">✕</button>
+        </div>
+
+        <section class="view" id="viewSearch">
+          <div class="grid" id="gridSearch"></div>
+          <div class="emptyState" id="emptySearch" style="display:none;">没有找到相关内容</div>
+        </section>
+
+
         <section class="view active" id="viewHome">
           <div class="homeHold">
 
@@ -1088,23 +1082,23 @@
             <div class="card memCard">
                           <div class="cardTitle">
                             <span>会员中心</span>
-                            <span class="pill" id="memBadgeMini"><span>星钻</span></span>
+                            <span class="pill" id="memBadgeMini"><span>钻石</span></span>
                           </div>
                           <div class="cardSub" id="memSub">
-                            星钻免登录可用；开通金耀后，可使用「金耀」菜单里的工具。
+                            钻石免登录可用；开通白银后，可使用「白银」菜单里的工具。
                           </div>
 
                           <div class="memRow">
                             <div class="memBig">
                               <div class="memIcon" id="memIcon">💎</div>
                               <div>
-                                <div class="memName" id="memName">星钻会员</div>
-                                <div class="memDesc" id="memDesc">免登录 · 可用星钻工具</div>
+                                <div class="memName" id="memName">钻石会员</div>
+                                <div class="memDesc" id="memDesc">免登录 · 可用钻石工具</div>
                               </div>
                             </div>
                             <div class="row">
-                              <button class="btnPrimary" id="upgradeBtn">开通金耀</button>
-                              <button class="btnGhost" id="logoutBtn" style="display:none;">退出金耀</button>
+                              <button class="btnPrimary" id="upgradeBtn">开通白银</button>
+                              <button class="btnGhost" id="logoutBtn" style="display:none;">退出白银</button>
                             </div>
                           </div>
 
@@ -1130,33 +1124,43 @@
                           </div>
                         </div>
 
+            
             <div class="card" id="apkCard">
-                          <div class="cardTitle">
-                            <span>下载APP</span>
-                            <span class="pill">APK</span>
-                          </div>
-                          <div class="cardSub">
-                            安卓安装包：安装到手机后打开更方便。<br/>
-                            如果在微信里无法安装，请点右上角「…」用浏览器打开再下载。
-                          </div>
-                          <div class="row" style="margin-top:12px;">
-                            <button class="btnPrimary grow" id="downloadApkBtn">下载APK</button>
-                            <button class="btnGhost grow" id="copyApkLinkBtn">复制APK链接</button>
-                          </div>
+              <div class="cardTitle">
+                <span>分享与下载</span>
+                <span class="pill">发给朋友</span>
+              </div>
+              <div class="cardSub">
+                把链接一键发给朋友：网页直接打开就能用；需要安装APP时让对方点「下载APP」。<br/>
+                （如微信里无法下载APK，请点右上角「…」用浏览器打开再下载。）
+              </div>
 
-                          <div style="height:1px;background:rgba(31,36,48,.06);margin-top:12px;"></div>
-                          <div class="cardSub" style="margin-top:12px;">
-                            网页版入口：复制链接到浏览器打开。
-                          </div>
-                          <div class="row" style="margin-top:12px;">
-                            <button class="btnPrimary grow" id="openWebBtn">打开网页版</button>
-                            <button class="btnGhost grow" id="copyWebLinkBtn">复制网页链接</button>
-                          </div>
-                                      </div>
+              <div class="shareGrid" style="margin-top:12px;">
+                <div class="shareItem">
+                  <div class="shareHead">
+                    <div class="shareLeft">
+                      <div class="shareIcon" style="background:linear-gradient(135deg, rgba(157,86,255,.95), rgba(74,218,255,.85));">🌐</div>
+                      <div class="shareText">
+                        <div class="shareName">网页版入口</div>
+                        <div class="shareDesc">不用安装，打开就能用</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="shareUrl" id="webUrlShow">加载中…</div>
+
+                  <div class="row" style="margin-top:12px;">
+                    <button class="btnPrimary grow" id="shareWebBtn">发给朋友</button>
+                    <button class="btnGhost grow" id="downloadApkBtn">下载APP（APK）</button>
+                  </div>
+                </div>
+              </div>
+</div>
 
             <div class="card">
                           <div class="cardTitle">
                             <span>数据清理</span>
+
                             <button class="btnDanger" id="clearBtn">清除数据</button>
                           </div>
                           <div class="cardSub">
@@ -1173,7 +1177,7 @@
                               </div>
                               <div class="feature-text">
                                 <div class="feature-title">双层级工具架构</div>
-                                <div class="feature-desc">全站功能精准划分为「星钻」与「金耀」专属模块，分屏呈现，互不干扰。</div>
+                                <div class="feature-desc">全站功能精准划分为「钻石」与「白银」专属模块，分屏呈现，互不干扰。</div>
                               </div>
                             </div>
                             <div class="feature-item">
@@ -1194,9 +1198,9 @@
                             <div class="guide-section">
                               <div class="guide-title">📖 新手使用指南</div>
                               <ul class="guide-list">
-                                <li><b>浏览与导航：</b>通过底部菜单栏可自由切换「首页」、「星钻」、「金耀」和「我的」版块。</li>
-                                <li><b>使用工具：</b>在星钻/金耀页，直接点击对应的工具卡片，即可跳转至相应的外部网页使用。</li>
-                                <li><b>权限解锁：</b>星钻工具默认免费开放；若需使用金耀工具，请在本页顶部完成「金耀会员」开通。</li>
+                                <li><b>浏览与导航：</b>通过底部菜单栏可自由切换「首页」、「钻石」、「白银」和「我的」版块。</li>
+                                <li><b>使用工具：</b>在钻石/白银页，直接点击对应的工具卡片，即可跳转至相应的外部网页使用。</li>
+                                <li><b>权限解锁：</b>钻石工具默认免费开放；若需使用白银工具，请在本页顶部完成「白银会员」开通。</li>
                                 <li><b>课程与求职：</b>「首页」提供最新的线下课程报名入口及招聘信息，支持在线一键投递。</li>
                               </ul>
                             </div>
@@ -1223,8 +1227,8 @@
   <div class="bottomNav" id="bottomNav">
     <div class="navInner" role="tablist" aria-label="菜单">
       <button class="navBtn active" id="navHome" role="tab" aria-selected="true"><span class="navI">🏠</span><span>首页</span></button>
-      <button class="navBtn" id="navDiamond" role="tab" aria-selected="false"><span class="navI">💎</span><span>星钻</span></button>
-      <button class="navBtn" id="navGold" role="tab" aria-selected="false"><span class="navI">👑</span><span>金耀</span></button>
+      <button class="navBtn" id="navDiamond" role="tab" aria-selected="false"><span class="navI">💎</span><span>钻石</span></button>
+      <button class="navBtn" id="navGold" role="tab" aria-selected="false"><span class="navI">🥈</span><span>白银</span></button>
       <button class="navBtn" id="navMy" role="tab" aria-selected="false"><span class="navI">👤</span><span>我的</span></button>
     </div>
   </div>
@@ -1353,7 +1357,7 @@
       <div class="dlgBody">
         清除后会发生这些变化：
         <ul class="list">
-          <li>会员状态会恢复为「星钻会员」。</li>
+          <li>会员状态会恢复为「钻石会员」。</li>
           <li>偏好设置会被清空。</li>
           <li>下次打开需要重新加载资源。</li>
         </ul>
@@ -1440,44 +1444,7 @@ document.addEventListener('copy', function(e) {
 
   const $ = (id)=>document.getElementById(id);
 
-  // --- 启动页广告逻辑 ---
-  (function(){
-    const splash = $("splashAd");
-    const skipBtn = $("skipAdBtn");
-    const splashActionBtn = $("splashActionBtn");
-    if(!splash || !skipBtn) return;
-
-    let timeLeft = 4;
-    let timer = null;
-
-    function closeSplash() {
-      clearInterval(timer);
-      splash.classList.add("hide");
-      setTimeout(() => {
-        splash.style.display = "none";
-      }, 600); 
-    }
-
-    timer = setInterval(() => {
-      timeLeft--;
-      if(timeLeft > 0) {
-        skipBtn.textContent = `跳过 ${timeLeft}s`;
-      } else {
-        closeSplash();
-      }
-    }, 1000);
-
-    skipBtn.addEventListener("click", closeSplash);
-
-    if(splashActionBtn) {
-      splashActionBtn.addEventListener("click", () => {
-        closeSplash();
-        openResume();
-      });
-    }
-  })();
-  // -------------------
-
+  
   let toastTimer = null;
   function showToast(msg) {
     const t = $("toast");
@@ -1513,24 +1480,24 @@ document.addEventListener('copy', function(e) {
   // 渲染会员界面的样式更新函数
   function paintMember(){
     const gold = isGold();
-    $("memName").textContent = gold ? "金耀会员" : "星钻会员";
-    $("memDesc").textContent = gold ? "已开通 · 可用金耀工具" : "免登录 · 可用星钻工具";
+    $("memName").textContent = gold ? "白银会员" : "钻石会员";
+    $("memDesc").textContent = gold ? "已开通 · 可用白银工具" : "免登录 · 可用钻石工具";
     
     const icon = $("memIcon");
     const badge = $("memBadgeMini");
 
     if (gold) {
-      icon.textContent = "👑";
-      icon.style.background = "linear-gradient(135deg, #FFE873 0%, #FFAA00 100%)";
-      icon.style.boxShadow = "0 10px 24px rgba(255, 170, 0, 0.35)";
+      icon.textContent = "🥈";
+      icon.style.background = "linear-gradient(135deg, #F5F7FA 0%, #C3CFE2 100%)";
+      icon.style.boxShadow = "0 10px 24px rgba(195, 207, 226, 0.5)";
       icon.style.border = "1px solid rgba(255, 255, 255, 0.9)";
       icon.style.textShadow = "0 2px 4px rgba(22, 25, 38, 0.15)";
       
-      badge.innerHTML = "<span>金耀</span>";
-      badge.style.background = "linear-gradient(90deg, #FFF0B3, #FFD54F)";
-      badge.style.color = "#7A4D00";
-      badge.style.border = "1px solid rgba(255, 213, 79, 0.5)";
-      badge.style.boxShadow = "0 4px 10px rgba(255, 170, 0, 0.15)";
+      badge.innerHTML = "<span>白银</span>";
+      badge.style.background = "linear-gradient(90deg, #F5F7FA, #E4EBF5)";
+      badge.style.color = "#5A6A85";
+      badge.style.border = "1px solid rgba(195, 207, 226, 0.6)";
+      badge.style.boxShadow = "0 4px 10px rgba(195, 207, 226, 0.25)";
     } else {
       icon.textContent = "💎";
       icon.style.background = "linear-gradient(135deg, rgba(64, 210, 255, .95), rgba(151, 80, 255, .85))";
@@ -1538,7 +1505,7 @@ document.addEventListener('copy', function(e) {
       icon.style.border = "none";
       icon.style.textShadow = "none";
       
-      badge.innerHTML = "<span>星钻</span>";
+      badge.innerHTML = "<span>钻石</span>";
       badge.style.background = "rgba(31,36,48,.06)";
       badge.style.color = "rgba(31,36,48,.78)";
       badge.style.border = "1px solid rgba(31,36,48,.06)";
@@ -1582,55 +1549,185 @@ document.addEventListener('copy', function(e) {
     document.body.appendChild(a); a.click(); a.remove();
   }
 
+  function norm(s){
+    return (s||"").toString().toLowerCase().trim();
+  }
+
+  function getTierLabel(tier){
+    return tier === "gold" ? "白银" : "钻石";
+  }
+
   function renderInto(gridId, filterTier){
     const grid = $(gridId);
     if(!grid) return;
     grid.innerHTML = "";
     const gold = isGold();
 
-    LINKS
-      .filter(it => it.tier === filterTier)
-      .forEach(item=>{
-        const needGold = item.tier === "gold";
-        const disabled = needGold && !gold;
+    const base = LINKS.filter(it => it.tier === filterTier);
 
-        const el = document.createElement("div");
-        el.className = "tool" + (disabled ? " disabled" : "");
-        el.innerHTML = `
-          <div class="left">
-            <div class="num" style="background:${colorById(item.id)}">${item.id}</div>
-            <div class="nameWrap">
-              <p class="name">${item.name}</p>
-            </div>
+    base.forEach((item, idx)=>{
+      const needGold = item.tier === "gold";
+      const disabled = needGold && !gold;
+
+      const showNo = idx + 1;
+
+      const el = document.createElement("div");
+      el.className = "tool" + (disabled ? " disabled" : "");
+      el.innerHTML = `
+        <div class="left">
+          <div class="num" style="background:${colorById(showNo)}">${showNo}</div>
+          <div class="nameWrap">
+            <p class="name">${item.name}</p>
+            <div class="toolMeta">${getTierLabel(item.tier)}</div>
           </div>
-          <div class="arrow">›</div>
-        `;
+        </div>
+        <div class="arrow">›</div>
+      `;
 
-        el.addEventListener("click", ()=>{
-          if(disabled){
-            showToast("请先开通金耀会员，解锁全部工具✨");
-            switchView("my");
-            
-            const form = $("upgradeForm");
-            form.classList.add("show");
-            
-            form.classList.remove("pulse-highlight");
-            void form.offsetWidth; 
-            form.classList.add("pulse-highlight");
-            form.scrollIntoView({behavior:"smooth", block:"center"});
-            
-            return;
-          }
-          openUrl(item.url);
-        });
+      el.addEventListener("click", ()=>{
+        if(disabled){
+          showToast("请先开通白银会员，解锁全部工具✨");
+          switchView("my");
 
-        grid.appendChild(el);
+          const form = $("upgradeForm");
+          form.classList.add("show");
+
+          form.classList.remove("pulse-highlight");
+          void form.offsetWidth;
+          form.classList.add("pulse-highlight");
+          form.scrollIntoView({behavior:"smooth", block:"center"});
+
+          return;
+        }
+        openUrl(item.url);
       });
+
+      grid.appendChild(el);
+    });
   }
 
   function renderAll(){
     renderInto("gridDiamond", "diamond");
     renderInto("gridGold", "gold");
+  }
+
+  function hitAllTools(keyword){
+    const kwRaw = (keyword || "").trim();
+    const kw = norm(kwRaw);
+    const qn = (/^\d+$/.test(kwRaw)) ? parseInt(kwRaw, 10) : null;
+    if(!kw && qn === null) return [];
+
+    const tokens = kw ? kw.split(/\s+/).filter(Boolean) : [];
+    const res = [];
+
+    ["diamond","gold"].forEach(tier=>{
+      const base = LINKS.filter(it => it.tier === tier);
+      base.forEach((item, idx)=>{
+        const localNo = idx + 1;
+        const hay = norm(item.name); // 仅搜索名称
+
+        let ok = false;
+        // 1. 如果输入的是纯数字，且等于前面的序号，则直接匹配
+        if (qn !== null && localNo === qn) {
+          ok = true;
+        } 
+        // 2. 否则进行名称的文本匹配
+        else if (tokens.length) {
+          ok = tokens.every(t => hay.includes(t));
+        }
+
+        if(ok){
+          res.push({ item, tier, localNo });
+        }
+      });
+    });
+
+    return res;
+  }
+
+  function renderSearch(keyword){
+    const grid = $("gridSearch");
+    if(!grid) return;
+    grid.innerHTML = "";
+
+    const list = hitAllTools(keyword);
+    const emptyEl = $("emptySearch");
+    if(emptyEl) emptyEl.style.display = list.length ? "none" : "block";
+
+    const gold = isGold();
+
+    list.forEach(({item, tier, localNo})=>{
+      const needGold = tier === "gold";
+      const disabled = needGold && !gold;
+
+      const el = document.createElement("div");
+      el.className = "tool" + (disabled ? " disabled" : "");
+      el.innerHTML = `
+        <div class="left">
+          <div class="num" style="background:${colorById(localNo)}">${localNo}</div>
+          <div class="nameWrap">
+            <p class="name">${item.name}</p>
+            <div class="toolMeta">${getTierLabel(tier)}</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span class="tierTag ${tier}">${getTierLabel(tier)}</span>
+          <div class="arrow">›</div>
+        </div>
+      `;
+
+      el.addEventListener("click", ()=>{
+        if(disabled){
+          showToast("请先开通白银会员，解锁全部工具✨");
+          switchView("my");
+
+          const form = $("upgradeForm");
+          form.classList.add("show");
+
+          form.classList.remove("pulse-highlight");
+          void form.offsetWidth;
+          form.classList.add("pulse-highlight");
+          form.scrollIntoView({behavior:"smooth", block:"center"});
+
+          return;
+        }
+        openUrl(item.url);
+      });
+
+      grid.appendChild(el);
+    });
+  }
+
+  function bindGlobalSearch(){
+    const panel = document.querySelector(".panel");
+    const input = $("searchAll");
+    const clear = $("clearAll");
+    if(!panel || !input) return;
+
+    const refresh = ()=>{
+      const v = (input.value || "").trim();
+      if(clear) clear.classList.toggle("show", v.length > 0);
+
+      if(v){
+        panel.classList.add("searching");
+        renderSearch(v);
+      }else{
+        panel.classList.remove("searching");
+      }
+    };
+
+    input.addEventListener("input", refresh);
+    input.addEventListener("focus", refresh);
+
+    if(clear){
+      clear.addEventListener("click", ()=>{
+        input.value = "";
+        input.focus();
+        refresh();
+      });
+    }
+
+    refresh();
   }
 
   function setActive(btnIds, activeId){
@@ -2040,7 +2137,7 @@ document.addEventListener('copy', function(e) {
 
     localStorage.setItem(KEY_GOLD, "1");
     $("upgradeForm").classList.remove("show");
-    showToast("已成功开通金耀会员！");
+    showToast("已成功开通白银会员！");
     paintMember();
   }
   
@@ -2050,7 +2147,7 @@ document.addEventListener('copy', function(e) {
 
   $("logoutBtn").addEventListener("click", ()=>{
     localStorage.removeItem(KEY_GOLD);
-    showToast("已退出金耀，恢复星钻会员");
+    showToast("已退出白银，恢复钻石会员");
     paintMember();
     const last = localStorage.getItem(KEY_LAST_VIEW);
     if(last === "gold") switchView("diamond");
@@ -2088,62 +2185,66 @@ document.addEventListener('copy', function(e) {
   bind("navGold","gold");
   bind("navMy","my");
 
-  // APK 下载链接（可直接替换成你的新地址）
+  // 分享 / 下载链接（可直接替换成你的新地址）
   const APK_URL = "https://github.com/799342382/AI-Toolbox/releases/download/%E5%AE%89%E8%A3%85/AI.apk";
+  const WEB_URL = "https://799342382.github.io/live-gifts/";
 
-  function bindApk(){
+  async function shareLink(title, text, url){
+    if(!url) return showToast("未配置链接");
+    if(navigator.share){
+      try{
+        await navigator.share({ title, text, url });
+        showToast("已唤起分享");
+        return;
+      }catch(e){
+        // 用户取消也算正常，走兜底即可
+      }
+    }
+    const ok = await copyText(url);
+    showToast(ok ? "已复制链接，可直接发给朋友" : "复制失败");
+  }
+
+  function openUrl(url){
+    if(!url) return showToast("未配置链接");
+    showToast("正在打开…");
+    const w = window.open(url, "_blank");
+    if(!w){ window.location.href = url; }
+  }
+
+  function bindShareDownload(){
+    // 显示网页链接
+    const webShow = $("webUrlShow");
+    if(webShow) webShow.textContent = WEB_URL || "未配置网页链接";
+
+    // 发给朋友：优先唤起系统分享；不支持时复制“网页+APK”两条链接
+    const shareBtn = $("shareWebBtn");
+    if(shareBtn){
+      shareBtn.addEventListener("click", async ()=>{
+        if(!WEB_URL && !APK_URL) return showToast("未配置链接");
+        const title = "工具入口";
+        const text = `网页版：${WEB_URL || "未配置"}
+APP下载：${APK_URL || "未配置"}`;
+        const url = WEB_URL || APK_URL; // 分享面板只能带一个 url，用网页优先
+        if(navigator.share){
+          try{
+            await navigator.share({ title, text, url });
+            showToast("已唤起分享");
+            return;
+          }catch(e){}
+        }
+        const ok = await copyText(text);
+        showToast(ok ? "已复制信息，可直接发给朋友" : "复制失败");
+      });
+    }
+
+    // 下载 APP（APK）
     const dBtn = $("downloadApkBtn");
-    const cBtn = $("copyApkLinkBtn");
-    const aLink = $("apkPlainLink");
-
-    if(aLink){ aLink.href = APK_URL; }
-
-    if(dBtn){
-      dBtn.addEventListener("click", () => {
-        if(!APK_URL) return showToast("未配置下载链接");
-        showToast("正在打开下载…");
-        const w = window.open(APK_URL, "_blank");
-        if(!w){ window.location.href = APK_URL; }
-      });
-    }
-
-    if(cBtn){
-      cBtn.addEventListener("click", async () => {
-        if(!APK_URL) return showToast("未配置下载链接");
-        const ok = await copyText(APK_URL);
-        showToast(ok ? "已复制APK链接" : "复制失败");
-      });
-    }
+    if(dBtn) dBtn.addEventListener("click", ()=>openUrl(APK_URL));
   }
 
-  bindApk();
+  bindShareDownload();
+  bindGlobalSearch();
 
-  // 网页入口（可替换成你的网页地址）
-  const WEB_URL = "https://799342382.github.io/live-gifts/#home";
-
-  function bindWeb(){
-    const oBtn = $("openWebBtn");
-    const cBtn = $("copyWebLinkBtn");
-
-    if(oBtn){
-      oBtn.addEventListener("click", () => {
-        if(!WEB_URL) return showToast("未配置网页链接");
-        showToast("正在打开网页…");
-        const w = window.open(WEB_URL, "_blank");
-        if(!w){ window.location.href = WEB_URL; }
-      });
-    }
-
-    if(cBtn){
-      cBtn.addEventListener("click", async () => {
-        if(!WEB_URL) return showToast("未配置网页链接");
-        const ok = await copyText(WEB_URL);
-        showToast(ok ? "已复制网页链接" : "复制失败");
-      });
-    }
-  }
-
-  bindWeb();
 
   $("buildDate").textContent = new Date().toISOString().slice(0,10);
 
