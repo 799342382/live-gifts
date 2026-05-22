@@ -560,8 +560,14 @@
       overflow:hidden;
       text-overflow:ellipsis;
     }
-    .shareUrl{
+    .shareLabel{
       margin-top: 12px;
+      font-size: 12px;
+      color: rgba(31,36,48,.62);
+      font-weight: 1000;
+    }
+    .shareUrl{
+      margin-top: 8px;
       padding: 10px 12px;
       border-radius: 16px;
       background: rgba(31,36,48,.03);
@@ -570,6 +576,11 @@
       font-size: 12px;
       line-height: 1.4;
       word-break: break-all;
+
+      /* 只放开链接区域的选中/长按复制 */
+      -webkit-user-select: text;
+      user-select: text;
+      -webkit-touch-callout: default;
     }
 
 
@@ -1129,33 +1140,51 @@
             
             <div class="card" id="apkCard">
               <div class="cardTitle">
-                <span>分享与下载</span>
-                <span class="pill">发给朋友</span>
+                <span>网页入口与APP安装</span>
               </div>
               <div class="cardSub">
-                把链接一键发给朋友：网页直接打开就能用；需要安装APP时让对方点「下载APP」。<br/>
-                （如微信里无法下载APK，请点右上角「…」用浏览器打开再下载。）
+                网页：复制下面「网页链接」粘贴到浏览器打开即可使用。<br/>
+                APP：如需安装，直接点「下载APP」。<br/>
+                （如微信里无法下载，请点右上角「…」用浏览器打开再下载。）
               </div>
 
               <div class="shareGrid" style="margin-top:12px;">
+
                 <div class="shareItem">
                   <div class="shareHead">
                     <div class="shareLeft">
                       <div class="shareIcon" style="background:linear-gradient(135deg, rgba(157,86,255,.95), rgba(74,218,255,.85));">🌐</div>
                       <div class="shareText">
-                        <div class="shareName">网页版入口</div>
+                        <div class="shareName">网页链接（复制到浏览器打开）</div>
                         <div class="shareDesc">不用安装，打开就能用</div>
                       </div>
                     </div>
                   </div>
 
+                  <div class="shareLabel">你要复制的内容就是下面这一条：</div>
                   <div class="shareUrl" id="webUrlShow">加载中…</div>
 
                   <div class="row" style="margin-top:12px;">
-                    <button class="btnPrimary grow" id="shareWebBtn">发给朋友</button>
-                    <button class="btnGhost grow" id="downloadApkBtn">下载APP（APK）</button>
+                    <button class="btnPrimary grow" id="copyWebBtn">一键复制网页链接</button>
                   </div>
                 </div>
+
+                <div class="shareItem">
+                  <div class="shareHead">
+                    <div class="shareLeft">
+                      <div class="shareIcon" style="background:linear-gradient(135deg, rgba(255,178,56,.95), rgba(255,92,140,.85));">📱</div>
+                      <div class="shareText">
+                        <div class="shareName">APP 安装</div>
+                        <div class="shareDesc">需要安装时再下载</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" style="margin-top:12px;">
+                    <button class="btnPrimary grow" id="downloadAppBtn">下载APP</button>
+                  </div>
+                </div>
+
               </div>
 </div>
 
@@ -2228,24 +2257,9 @@ document.addEventListener('copy', function(e) {
   bind("navGold","gold");
   bind("navMy","my");
 
-  // 分享 / 下载链接
-  const APK_URL = "https://github.com/799342382/AI-Toolbox/releases/download/%E5%AE%89%E8%A3%85/AI.apk";
+  // 网页 / APP 入口
+  const APP_URL = "https://github.com/799342382/AI-Toolbox/releases/download/%E5%AE%89%E8%A3%85/AI.apk";
   const WEB_URL = "https://799342382.github.io/live-gifts/";
-
-  async function shareLink(title, text, url){
-    if(!url) return showToast("未配置链接");
-    if(navigator.share){
-      try{
-        await navigator.share({ title, text, url });
-        showToast("已唤起分享");
-        return;
-      }catch(e){
-        // 用户取消也算正常，走兜底即可
-      }
-    }
-    const ok = await copyText(url);
-    showToast(ok ? "已复制链接，可直接发给朋友" : "复制失败");
-  }
 
   function openUrl(url){
     if(!url) return showToast("未配置链接");
@@ -2255,34 +2269,28 @@ document.addEventListener('copy', function(e) {
   }
 
   function bindShareDownload(){
-    // 显示网页链接
+    // 显示网页链接（用户看到的是什么，复制出去就是什么）
     const webShow = $("webUrlShow");
     if(webShow) webShow.textContent = WEB_URL || "未配置网页链接";
 
-    // 发给朋友：优先唤起系统分享；不支持时复制“网页+APK”两条链接
-    const shareBtn = $("shareWebBtn");
-    if(shareBtn){
-      shareBtn.addEventListener("click", async ()=>{
-        if(!WEB_URL && !APK_URL) return showToast("未配置链接");
-        const title = "工具入口";
-        const text = `网页版：${WEB_URL || "未配置"}
-APP下载：${APK_URL || "未配置"}`;
-        const url = WEB_URL || APK_URL; // 分享面板只能带一个 url，用网页优先
-        if(navigator.share){
-          try{
-            await navigator.share({ title, text, url });
-            showToast("已唤起分享");
-            return;
-          }catch(e){}
-        }
-        const ok = await copyText(text);
-        showToast(ok ? "已复制信息，可直接发给朋友" : "复制失败");
+    // 一键复制网页链接
+    const copyWebBtn = $("copyWebBtn");
+    if(copyWebBtn){
+      copyWebBtn.addEventListener("click", async ()=>{
+        if(!WEB_URL) return showToast("未配置网页链接");
+        const ok = await copyText(WEB_URL);
+        showToast(ok ? "已复制网页链接" : "复制失败");
       });
     }
 
-    // 下载 APP（APK）
-    const dBtn = $("downloadApkBtn");
-    if(dBtn) dBtn.addEventListener("click", ()=>openUrl(APK_URL));
+    // 下载 APP
+    const dBtn = $("downloadAppBtn");
+    if(dBtn){
+      dBtn.addEventListener("click", ()=>{
+        if(!APP_URL) return showToast("未配置APP下载链接");
+        openUrl(APP_URL);
+      });
+    }
   }
 
   bindShareDownload();
