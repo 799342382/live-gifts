@@ -1140,11 +1140,11 @@
             
             <div class="card" id="apkCard">
               <div class="cardTitle">
-                <span>网页入口与APP安装</span>
+                <span>网页入口与下载安装</span>
               </div>
               <div class="cardSub">
                 网页：复制下面「网页链接」粘贴到浏览器打开即可使用。<br/>
-                APP：如需安装，直接点「下载APP」。<br/>
+                手机：如需安装，直接点「下载APP」。<br/>电脑：如需安装，点「下载安装包」。<br/>
                 （如微信里无法下载，请点右上角「…」用浏览器打开再下载。）
               </div>
 
@@ -1174,8 +1174,8 @@
                     <div class="shareLeft">
                       <div class="shareIcon" style="background:linear-gradient(135deg, rgba(255,178,56,.95), rgba(255,92,140,.85));">📱</div>
                       <div class="shareText">
-                        <div class="shareName">APP 安装</div>
-                        <div class="shareDesc">需要安装时再下载</div>
+                        <div class="shareName">手机APP 安装</div>
+                        <div class="shareDesc">安卓手机安装用</div>
                       </div>
                     </div>
                   </div>
@@ -1186,6 +1186,22 @@
                 </div>
 
               </div>
+                <div class="shareItem">
+                  <div class="shareHead">
+                    <div class="shareLeft">
+                      <div class="shareIcon" style="background:linear-gradient(135deg, rgba(64,210,255,.95), rgba(151,80,255,.85));">💻</div>
+                      <div class="shareText">
+                        <div class="shareName">电脑安装包</div>
+                        <div class="shareDesc">Windows 电脑安装用</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" style="margin-top:12px;">
+                    <button class="btnPrimary grow" id="downloadWinBtn">下载安装包</button>
+                  </div>
+                </div>
+
 </div>
 
             <div class="card">
@@ -2257,8 +2273,9 @@ document.addEventListener('copy', function(e) {
   bind("navGold","gold");
   bind("navMy","my");
 
-  // 网页 / APP 入口
-  const APP_URL = "https://github.com/799342382/AI-Toolbox/releases/download/%E5%AE%89%E8%A3%85/AI.apk";
+  // 网页 / 下载入口
+  const APK_URL = "https://github.com/799342382/AI-Toolbox/releases/download/%E5%AE%89%E8%A3%85/AI.apk";
+  const WIN_URL = "https://github.com/799342382/azb/actions/runs/26361144714/artifacts/7185097701";
   const WEB_URL = "https://799342382.github.io/live-gifts/";
 
   function openUrl(url){
@@ -2287,8 +2304,17 @@ document.addEventListener('copy', function(e) {
     const dBtn = $("downloadAppBtn");
     if(dBtn){
       dBtn.addEventListener("click", ()=>{
-        if(!APP_URL) return showToast("未配置APP下载链接");
-        openUrl(APP_URL);
+        if(!APK_URL) return showToast("未配置手机APP下载链接");
+        openUrl(APK_URL);
+      });
+    }
+
+    // 下载电脑安装包
+    const winBtn = $("downloadWinBtn");
+    if(winBtn){
+      winBtn.addEventListener("click", ()=>{
+        if(!WIN_URL) return showToast("未配置电脑安装包下载链接");
+        openUrl(WIN_URL);
       });
     }
   }
