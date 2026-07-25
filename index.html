@@ -2771,7 +2771,8 @@ document.addEventListener('copy', function(e) {
   bindShareDownload();
   bindGlobalSearch();
 
-  $("buildDate").textContent = new Date().toISOString().slice(0,10);
+  const BUILD_DATE = "2026-07-25";
+  $("buildDate").textContent = BUILD_DATE;
 
   paintAccount();
 
