@@ -1,0 +1,33 @@
+{
+  "name": "智汇工作台 · AI 工具与学习中枢",
+  "short_name": "智汇工作台",
+  "description": "AI 工具导航、课程学习、招聘投递、资源下载与账号管理一体化工作台，支持 PC 与移动端。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f2f3f6",
+  "theme_color": "#2f6fb8",
+  "categories": ["productivity", "business", "education"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ]
+}
