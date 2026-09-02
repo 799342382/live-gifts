@@ -309,9 +309,28 @@
   .courseNote svg{flex:0 0 auto;margin-top:1px;}
   .courseFoot{padding:12px 16px 16px;border-top:1px solid rgba(31,36,48,.06);margin-top:auto;}
 
+  /* 学习课程页 - 网格填充（auto-fit 让卡片拉伸铺满，右侧不留空；同高对齐跟随最长那张） */
+  /* 规则：所有 grid 容器不要写 align-items:start，卡片统一用 display:flex;flex-direction:column，
+     底部按钮 / CTA 用 margin-top:auto 推到下沿，整行所有卡片跟最长那张齐平。 */
+  #learnGrid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+  .recruitHead{margin:0 0 14px;gap:12px;}
+  .recruitHead .bar{background:#ef4444;}
+  .recruitHead h2{color:rgba(31,36,48,.92);}
+  .recruitTag{font-size:12px;font-weight:800;color:#ef4444;background:rgba(239,68,68,.08);
+    border:1px solid rgba(239,68,68,.18);padding:4px 10px;border-radius:999px;margin-left:auto;}
+  .recruitGrid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+  /* 团队招募卡片内部撑满：列表改 2 列，避免宽卡片里内容挤在左侧 */
+  .recruitGrid .jobList{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;padding-left:0;margin-top:14px;list-style:none;}
+  .recruitGrid .jobList li{margin:0;padding-left:0;position:relative;}
+  .recruitGrid .jobList li::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#ef4444;margin-right:8px;vertical-align:middle;opacity:.7;}
+  .recruitGrid .job{padding:14px 16px;border-radius:var(--radius);border:1px solid rgba(239,68,68,.12);
+    background:linear-gradient(180deg,#fff7f7 0%,var(--surface) 70%);position:relative;}
+  .recruitGrid .job:hover{border-color:rgba(239,68,68,.32);}
+
   /* 招聘卡 */
   .job{padding:16px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);
     transition:transform .24s cubic-bezier(.22,1,.36,1),box-shadow .24s,border-color .24s;
+    display:flex;flex-direction:column;
   }
   .job:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:rgba(31,36,48,.18);}
   .job:hover .jobIcon{animation:iconPop .35s ease;}
@@ -324,7 +343,7 @@
   .jobPill{padding:6px 11px;border-radius:999px;font-size:11.5px;font-weight:900;background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.2);white-space:nowrap;animation:pulseSoft 2.4s infinite;}
   .jobList{margin:12px 0 0;padding-left:18px;color:rgba(31,36,48,.8);font-size:12.5px;line-height:1.65;}
   .jobList li{margin:5px 0;opacity:0;}
-  .jobActions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
+  .jobActions{margin-top:auto;padding-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
   .jobActions .btn{transition:transform .14s,box-shadow .18s,background .18s;}
   .jobActions .btn:hover{transform:translateY(-2px) scale(1.02);}
   .jobs{grid-template-columns:1fr 1fr;}
@@ -522,7 +541,7 @@
 
   /* 下载中心内的联系与支持 */
   .dlSupport{scroll-margin-top:22px;}
-  .spGrid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:14px;align-items:start;}
+  .spGrid{display:grid;grid-template-columns:1fr;gap:14px;align-items:start;}
   .dlSupport .card{box-shadow:none;}
   .dlSupport .supportCard{background:var(--surface);}
   @media (max-width:900px){ .spGrid{grid-template-columns:1fr;} }
@@ -935,19 +954,10 @@
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg></span>
         学习课程
       </div>
-      <div class="navItem" data-view="jobs">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg></span>
-        招聘中心
-        <span class="badge" id="navJobBadge">2</span>
-      </div>
     </nav>
 
     <div class="navLabel">个人</div>
     <nav class="nav">
-      <div class="navItem" data-view="download">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>
-        下载中心
-      </div>
       <div class="navItem" data-view="mine">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span>
         我的账号
@@ -980,7 +990,7 @@
 
       <div class="topSearch" id="topSearchBox" style="cursor:pointer;">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="topSearch" readonly autocomplete="off" placeholder="搜索工具 / 课程 / 招聘 / 页面…" style="cursor:pointer;" />
+        <input id="topSearch" readonly autocomplete="off" placeholder="搜索工具 / 课程 / 岗位 / 页面…" style="cursor:pointer;" />
         <div class="spotHint" id="topSearchHint">⌘ K</div>
       </div>
 
@@ -1008,8 +1018,8 @@
                 <div class="heroDesc">团队正在扩充，寻找对 AI 工具与优质内容有热情的伙伴。查看岗位详情，或在线投递简历，我们尽快与你联系。</div>
                 <div class="row" style="margin-top:16px;">
                   <button class="btn btnPrimary" id="heroDetail">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M9 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3"/></svg>
-                    招聘详情
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg>
+                    查看岗位
                   </button>
                   <button class="btn btnGhost" id="heroResume">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
@@ -1048,136 +1058,141 @@
           <div class="searchHint" id="toolEmpty" style="display:none;">该分类下暂无工具，去「学习课程」看看吧。</div>
         </section>
 
-        <!-- ========== 学习课程 ========== -->
+        <!-- ========== 学习课程（含团队招募，团队招募置顶） ========== -->
         <section class="view" id="view-learn">
+          <div class="secHead recruitHead"><h2><span class="bar barRecruit"></span>团队招募</h2><span class="recruitTag">学完即可加入团队</span></div>
+          <div class="grid jobs recruitGrid" id="jobGrid"></div>
           <div class="secHead"><h2><span class="bar"></span>学习课程</h2></div>
-          <div class="grid" id="learnGrid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr));"></div>
+          <div class="grid" id="learnGrid"></div>
         </section>
 
-        <!-- ========== 招聘中心 ========== -->
-        <section class="view" id="view-jobs">
-          <div class="secHead"><h2><span class="bar"></span>招聘中心</h2></div>
-          <div class="grid jobs" id="jobGrid"></div>
-        </section>
+        <!-- ========== 我的账号（含下载中心 / 联系与支持） ========== -->
+        <section class="view" id="view-mine">
+          <div class="secHead"><h2><span class="bar"></span>我的账号</h2></div>
 
-        <!-- ========== 下载中心 ========== -->
-        <section class="view" id="view-download">
-          <div class="secHead"><h2><span class="bar"></span>下载中心</h2></div>
-          <div class="dl">
-            <!-- 网页入口 -->
-            <div class="dlHero">
-              <div class="dlHeroLeft">
-                <div class="dlHeroIco">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg>
+          <!-- 账号中心 -->
+          <div class="grid" style="grid-template-columns:1fr;">
+            <div class="card memCard">
+              <div class="memTop">
+                <h3>账号中心</h3>
+                <span class="pill" id="memBadge">未登录</span>
+              </div>
+              <div id="memSub" style="font-size:12.5px;color:var(--muted);margin-bottom:14px;">注册后会保存在本机；删除账号后，下次打开需要重新填写。</div>
+              <div class="memBig">
+                <div class="memIcon" id="memIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></div>
+                <div class="memInfo">
+                  <div class="memName" id="memName">未登录</div>
+                  <div class="memDesc" id="memDesc">请先注册账号</div>
                 </div>
-                <div class="dlHeroMain">
-                  <div class="dlHeroTitle">网页版入口</div>
-                  <div class="dlHeroDesc">无需下载安装，复制下方链接，在手机或电脑浏览器中打开即可使用完整功能。</div>
-                  <div class="dlTags">
-                    <span class="dlTag">PC 端</span>
-                    <span class="dlTag">平板</span>
-                    <span class="dlTag">手机浏览器</span>
-                    <span class="dlTag">始终最新版</span>
-                  </div>
+                <div class="row" style="margin-left:auto;">
+                  <button class="btn btnPrimary sm" id="editAccountBtn">填写账号</button>
+                  <button class="btn btnDanger sm" id="deleteAccountBtn" style="display:none;">删除账号</button>
                 </div>
               </div>
-              <div class="dlHeroRight">
-                <div class="dlHeroUrl">
-                  <code id="webUrlShow">加载中…</code>
-                  <button class="btn btnPrimary sm" id="copyWebBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                    复制
+            </div>
+
+            <!-- 下载中心 -->
+            <div class="secHead" style="margin-top:var(--gap);margin-bottom:14px;"><h2><span class="bar"></span>下载中心</h2></div>
+            <div class="dl">
+              <!-- 网页入口 -->
+              <div class="dlHero">
+                <div class="dlHeroLeft">
+                  <div class="dlHeroIco">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg>
+                  </div>
+                  <div class="dlHeroMain">
+                    <div class="dlHeroTitle">网页版入口</div>
+                    <div class="dlHeroDesc">分享下方链接到其他设备，打开即可使用完整功能。</div>
+                    <div class="dlTags">
+                      <span class="dlTag">PC 端</span>
+                      <span class="dlTag">平板</span>
+                      <span class="dlTag">手机浏览器</span>
+                      <span class="dlTag">始终最新版</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="dlHeroRight">
+                  <div class="dlHeroUrl">
+                    <code id="webUrlShow">加载中…</code>
+                    <button class="btn btnPrimary sm" id="shareWebBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                      分享
+                    </button>
+                  </div>
+                  <div class="dlNote" style="text-align:center;margin-top:8px;">链接已指向新版智汇工作台，分享后浏览器打开即可。</div>
+                </div>
+              </div>
+
+              <!-- 下载卡片 -->
+              <div class="dlGrid">
+                <div class="dlCard">
+                  <div class="dlCardHead">
+                    <div class="dlCardIco">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+                    </div>
+                    <div class="dlCardTitleWrap">
+                      <div class="dlCardTitle">安卓手机 APP<span class="badge">推荐</span></div>
+                      <div class="dlCardSub">Android 安装包（.apk）</div>
+                    </div>
+                  </div>
+                  <div class="dlMeta">
+                    <span>版本 v1.0</span>
+                    <span>安卓 8.0+</span>
+                  </div>
+                  <button class="btn btnPrimary" id="downloadAppBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                    下载 APP
                   </button>
+                  <div class="dlNote">下载完成后点击安装包即可安装；若提示"未知来源"，请在设置中允许。</div>
                 </div>
-                <div class="dlNote" style="text-align:center;margin-top:8px;">链接已指向新版智汇工作台，复制后浏览器打开即可。</div>
+
+                <div class="dlCard">
+                  <div class="dlCardHead">
+                    <div class="dlCardIco">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
+                    </div>
+                    <div class="dlCardTitleWrap">
+                      <div class="dlCardTitle">Windows 安装包</div>
+                      <div class="dlCardSub">电脑端安装程序</div>
+                    </div>
+                  </div>
+                  <div class="dlMeta">
+                    <span>版本 v1.0</span>
+                    <span>Win 10 / 11</span>
+                  </div>
+                  <button class="btn btnPrimary" id="downloadWinBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                    下载安装包
+                  </button>
+                  <div class="dlNote">下载后双击运行安装；部分安全软件可能误报，请放心使用。</div>
+                </div>
+
+                <div class="dlCard">
+                  <div class="dlCardHead">
+                    <div class="dlCardIco">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </div>
+                    <div class="dlCardTitleWrap">
+                      <div class="dlCardTitle">反馈与客服</div>
+                      <div class="dlCardSub">问题 / 建议 / 商务咨询</div>
+                    </div>
+                  </div>
+                  <div class="dlMeta">
+                    <span>工作日优先</span>
+                    <span>邮件回复</span>
+                  </div>
+                  <button class="btn btnPrimary" id="goSupportBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    联系我们
+                  </button>
+                  <div class="dlNote">工作日 9:00–18:00 优先处理，其余时间看到即回复。</div>
+                </div>
               </div>
             </div>
 
-            <!-- 下载卡片 -->
-            <div class="dlGrid">
-              <div class="dlCard">
-                <div class="dlCardHead">
-                  <div class="dlCardIco">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
-                  </div>
-                  <div class="dlCardTitleWrap">
-                    <div class="dlCardTitle">安卓手机 APP<span class="badge">推荐</span></div>
-                    <div class="dlCardSub">Android 安装包（.apk）</div>
-                  </div>
-                </div>
-                <div class="dlMeta">
-                  <span>版本 v1.0</span>
-                  <span>安卓 8.0+</span>
-                </div>
-                <button class="btn btnPrimary" id="downloadAppBtn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-                  下载 APP
-                </button>
-                <div class="dlNote">下载完成后点击安装包即可安装；若提示"未知来源"，请在设置中允许。</div>
-              </div>
-
-              <div class="dlCard">
-                <div class="dlCardHead">
-                  <div class="dlCardIco">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
-                  </div>
-                  <div class="dlCardTitleWrap">
-                    <div class="dlCardTitle">Windows 安装包</div>
-                    <div class="dlCardSub">电脑端安装程序</div>
-                  </div>
-                </div>
-                <div class="dlMeta">
-                  <span>版本 v1.0</span>
-                  <span>Win 10 / 11</span>
-                </div>
-                <button class="btn btnPrimary" id="downloadWinBtn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-                  下载安装包
-                </button>
-                <div class="dlNote">下载后双击运行安装；部分安全软件可能误报，请放心使用。</div>
-              </div>
-
-              <div class="dlCard">
-                <div class="dlCardHead">
-                  <div class="dlCardIco">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                  </div>
-                  <div class="dlCardTitleWrap">
-                    <div class="dlCardTitle">反馈与客服</div>
-                    <div class="dlCardSub">问题 / 建议 / 商务咨询</div>
-                  </div>
-                </div>
-                <div class="dlMeta">
-                  <span>工作日优先</span>
-                  <span>邮件回复</span>
-                </div>
-                <button class="btn btnPrimary" id="goSupportBtn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                  联系我们
-                </button>
-                <div class="dlNote">工作日 9:00–18:00 优先处理，其余时间看到即回复。</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 联系与支持 -->
-          <div class="dlSupport" id="dlSupport">
-            <div class="secHead" style="margin-top:var(--gap);margin-bottom:14px;"><h2><span class="bar"></span>联系与支持</h2></div>
+            <!-- 联系与支持 -->
+            <div class="secHead" id="contactSection" style="margin-top:var(--gap);margin-bottom:14px;"><h2><span class="bar"></span>联系与支持</h2></div>
             <div class="spGrid">
-              <div class="card supportCard">
-                <div class="supportTop">
-                  <div class="supportIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-                  <div>
-                    <div class="supportTitle">我们随时为您提供帮助</div>
-                    <div class="supportDesc">填写右侧表单说明您的需求，我们会在工作日优先处理。</div>
-                  </div>
-                </div>
-                <div class="supportMeta">
-                  <span class="supportBadge"><b>在线时间</b> 周一至周五 09:00–18:00</span>
-                  <span class="supportBadge"><b>其他时间</b> 看到即回复</span>
-                </div>
-              </div>
-
               <div class="card">
                 <div class="typePicker" id="msgTypePicker">
                   <button class="typeBtn active" data-topic="综合咨询" type="button">综合咨询</button>
@@ -1199,55 +1214,12 @@
                 </div>
               </div>
             </div>
-          </div>
-        </section>
 
-        <!-- ========== 我的账号 ========== -->
-        <section class="view" id="view-mine">
-          <div class="secHead"><h2><span class="bar"></span>我的账号</h2></div>
-          <div class="quickEntries">
-            <div class="qeCard" data-view="download">
-              <span class="qeIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>
-              <div><div class="qeName">下载中心</div><div class="qeDesc">网页链接 / APP / 安装包</div></div>
-              <span class="qeArrow">›</span>
-            </div>
-            <div class="qeCard" data-view="download">
-              <span class="qeIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-              <div><div class="qeName">联系与支持</div><div class="qeDesc">工单 / 反馈 / 咨询</div></div>
-              <span class="qeArrow">›</span>
-            </div>
-            <div class="qeCard" id="openHelp">
-              <span class="qeIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span>
-              <div><div class="qeName">帮助中心</div><div class="qeDesc">新手指南 / 常见问题</div></div>
-              <span class="qeArrow">›</span>
-            </div>
-          </div>
-          <div class="grid" style="grid-template-columns:1fr;">
-            <div class="card memCard">
-              <div class="memTop">
-                <h3>账号中心</h3>
-                <span class="pill" id="memBadge">未登录</span>
-              </div>
-              <div id="memSub" style="font-size:12.5px;color:var(--muted);margin-bottom:14px;">注册后会保存在本机；删除账号后，下次打开需要重新填写。</div>
-              <div class="memBig">
-                <div class="memIcon" id="memIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></div>
-                <div class="memInfo">
-                  <div class="memName" id="memName">未登录</div>
-                  <div class="memDesc" id="memDesc">请先注册账号</div>
-                </div>
-                <div class="row" style="margin-left:auto;">
-                  <button class="btn btnPrimary sm" id="editAccountBtn">填写账号</button>
-                  <button class="btn btnDanger sm" id="deleteAccountBtn" style="display:none;">删除账号</button>
-                </div>
-              </div>
-            </div>
-
+            <!-- 恢复出厂设置 -->
             <div class="card">
-              <div class="memTop"><h3>数据清理</h3></div>
-              <div style="font-size:12.5px;color:var(--muted);line-height:1.6;">恢复到首次打开状态（清除本机保存的账号、偏好设置等）。清除后下次打开需要重新填写账号，本操作不可撤销。</div>
-              <div class="row" style="margin-top:14px;"><button class="btn btnDanger" id="clearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>清除数据</button></div>
+              <div class="memTop"><h3>恢复出厂设置</h3></div>
+              <div class="row" style="margin-top:14px;"><button class="btn btnDanger" id="clearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>恢复出厂设置</button></div>
             </div>
-
 
             <div class="card" style="padding:12px 16px;"><div class="memDesc" style="margin:0;">更新日期：<span id="buildDate"></span></div></div>
           </div>
@@ -1290,11 +1262,6 @@
       <span class="bIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg></span>
       <span class="bTxt">学习</span>
     </div>
-    <div class="bTab" data-view="jobs">
-      <span class="bIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg></span>
-      <span class="bTxt">招聘</span>
-      <span class="bBadge" id="tabJobBadge">2</span>
-    </div>
     <div class="bTab" data-view="mine">
       <span class="bIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span>
       <span class="bTxt">我的</span>
@@ -1316,7 +1283,7 @@
   <div class="spotlight" role="dialog" aria-modal="true" aria-label="全局搜索">
     <div class="spotHead">
       <svg class="spotIcon" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input id="spotInput" autocomplete="off" placeholder="搜索工具、课程、招聘、下载、页面…" />
+      <input id="spotInput" autocomplete="off" placeholder="搜索工具、课程、岗位、页面…" />
       <button class="spotClear" id="spotClear" aria-label="清空">×</button>
       <div class="spotHint">ESC</div>
     </div>
@@ -1379,7 +1346,7 @@
       <div class="helpList">
         <div class="helpItem">
           <div class="helpQ"><span class="helpNum">1</span>工作台如何使用？</div>
-          <div class="helpA">左侧（或手机底部 Tab）切换「首页 / 工具 / 学习 / 招聘 / 下载 / 我的」七大板块。点击卡片即可跳转对应工具、课程或下载入口。</div>
+          <div class="helpA">左侧（或手机底部 Tab）切换「首页 / 工具 / 学习 / 我的」四大板块。学习课程页底部可直接查看团队招募岗位并投递简历；下载与联系支持已合并到「我的」页。</div>
         </div>
         <div class="helpItem">
           <div class="helpQ"><span class="helpNum">2</span>账号会保存多久？</div>
@@ -1395,22 +1362,14 @@
         </div>
         <div class="helpItem">
           <div class="helpQ"><span class="helpNum">5</span>如何投递简历？</div>
-          <div class="helpA">在「招聘」板块选择「剪辑操盘手」或「电话销售」，点击「投递简历」填写信息即可在线提交。</div>
+          <div class="helpA">进入「学习课程」页，滚动到底部「团队招募」区，选择岗位（如「剪辑操盘手」「电话销售」）后点击「投递简历」填写信息即可在线提交。</div>
         </div>
         <div class="helpItem">
           <div class="helpQ"><span class="helpNum">6</span>还有其他问题？</div>
-          <div class="helpA">进入「我的账号」>「下载中心」>「联系与支持」提交留言，或点击底部「隐私政策 / 服务条款」了解规则。</div>
+          <div class="helpA">进入「我的账号」页，滚动到「联系与支持」区提交留言，或点击底部「隐私政策 / 服务条款」了解规则。</div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- 招聘详情弹窗 -->
-<div class="overlay" id="detailsOv">
-  <div class="dialog">
-    <div class="dlgHead"><p class="dlgTitle">招聘详情</p><button class="xBtn" id="xDetails">✕</button></div>
-    <div class="dlgBody" id="detailsBody" style="max-height:64dvh;overflow-y:auto;"></div>
   </div>
 </div>
 
@@ -1495,12 +1454,12 @@
   </div>
 </div>
 
-<!-- 清除数据确认 -->
+<!-- 恢复出厂设置确认 -->
 <div class="overlay" id="ov">
   <div class="dialog">
-    <div class="dlgHead"><p class="dlgTitle">确认清除数据？</p><button class="xBtn" id="xOv">✕</button></div>
+    <div class="dlgHead"><p class="dlgTitle">确认恢复出厂设置？</p><button class="xBtn" id="xOv">✕</button></div>
     <div class="dlgBody">
-      清除后会发生这些变化：
+      恢复出厂设置后会发生这些变化：
       <ul style="margin:10px 0;padding-left:20px;font-size:13px;line-height:1.8;">
         <li>当前账号会被删除。</li>
         <li>偏好设置会被清空。</li>
@@ -1513,7 +1472,7 @@
     </div>
     <div class="dlgFoot">
       <button class="btn btnGhost grow" id="cancelClear">取消</button>
-      <button class="btn btnDanger grow" id="confirmClear" disabled>确认清除</button>
+      <button class="btn btnDanger grow" id="confirmClear" disabled>确认恢复</button>
     </div>
   </div>
 </div>
@@ -1633,12 +1592,12 @@ $('linkSelectorOv').addEventListener('click',e=>{ if(e.target===$('linkSelectorO
 /* ========= 帮助中心 ========= */
 function openHelp(){ $('helpOv').classList.add('show'); }
 function closeHelp(){ $('helpOv').classList.remove('show'); }
-$('openHelp').addEventListener('click',openHelp);
+const _openHelpEl=$('openHelp'); if(_openHelpEl) _openHelpEl.addEventListener('click',openHelp);
 $('xHelp').addEventListener('click',closeHelp);
 $('helpOv').addEventListener('click',e=>{ if(e.target===$('helpOv')) closeHelp(); });
 
 /* ========= 视图切换 ========= */
-const VIEWS=['home','tools','learn','jobs','download','mine','search'];
+const VIEWS=['home','tools','learn','mine','search'];
 function switchView(v,save=true){
   VIEWS.forEach(x=>{ const el=$('view-'+x); if(el) el.classList.toggle('active',x===v); });
   document.querySelectorAll('.navItem[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v));
@@ -1815,7 +1774,7 @@ function renderToolGrid(){
   animateChildren($('toolGrid'),'.tool','anim-fadeUp');
 }
 
-/* ========= 渲染：学习课程 ========= */
+/* ========= 渲染：学习课程（含团队招募岗位） ========= */
 function renderLearn(){
   $('learnGrid').innerHTML=COURSES.map((c,i)=>{
     const items=(c.items||[]).filter(Boolean);
@@ -1847,10 +1806,8 @@ function renderLearn(){
   });
   animateChildren($('learnGrid'),'.course','anim-popIn');
   animateChildren($('learnGrid'),'.courseList li','anim-fadeUp');
-}
 
-/* ========= 渲染：招聘 ========= */
-function renderJobs(){
+  // 团队招募（岗位），并入学习课程页顶部
   $('jobGrid').innerHTML=JOBS.map((j,i)=>`
     <div class="job">
       <div class="jobHead">
@@ -1868,24 +1825,27 @@ function renderJobs(){
     </div>`).join('');
   $('jobGrid').querySelectorAll('[data-resume]').forEach(b=>b.addEventListener('click',()=>openResume(b.dataset.resume)));
   $('jobGrid').querySelectorAll('[data-msg]').forEach(b=>b.addEventListener('click',()=>openMsg(b.dataset.msg)));
-  $('navJobBadge').textContent=JOBS.length;
-  const tb=$('tabJobBadge'); if(tb) tb.textContent=JOBS.length;
   animateChildren($('jobGrid'),'.job','anim-popIn');
   animateChildren($('jobGrid'),'.jobList li','anim-fadeUp');
 }
 
 /* ========= 下载中心 ========= */
 $('webUrlShow').textContent=CONTENT.downloads.webUrl;
-$('copyWebBtn').addEventListener('click',async()=>{
-  const ok=await copyText(CONTENT.downloads.webUrl);
-  showToast(ok?'已复制网页链接':'复制失败，请手动复制');
+$('shareWebBtn').addEventListener('click',async()=>{
+  const url=CONTENT.downloads.webUrl;
+  if(navigator.share){
+    try{ await navigator.share({title:'智汇工作台 · 网页版', url}); showToast('已分享'); return; }
+    catch(e){ if(e.name==='AbortError') return; }
+  }
+  const ok=await copyText(url);
+  showToast(ok?'链接已复制（可手动分享）':'复制失败，请手动复制');
 });
 $('downloadAppBtn').addEventListener('click',()=>openUrl(CONTENT.downloads.apkUrl));
 $('downloadWinBtn').addEventListener('click',()=>openUrl(CONTENT.downloads.winUrl));
 
 /* 下载中心 - 反馈客服入口 */
 $('goSupportBtn').addEventListener('click',()=>{
-  const el=$('dlSupport');
+  const el=$('contactSection');
   if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); }
 });
 
@@ -1981,6 +1941,14 @@ function openResume(prefRole){
 }
 function closeResume(){ $('resumeOv').classList.remove('show'); }
 $('heroResume').addEventListener('click',()=>openResume());
+$('heroDetail').addEventListener('click',()=>{
+  switchView('learn');
+  // 等渲染完成后滚到团队招募区
+  setTimeout(()=>{
+    const head=document.querySelector('.recruitHead');
+    if(head) head.scrollIntoView({behavior:'smooth',block:'start'});
+  },80);
+});
 $('pickEditor').addEventListener('click',()=>{ $('rRole').value='剪辑操盘手'; $('pickEditor').classList.add('active'); $('pickSales').classList.remove('active'); });
 $('pickSales').addEventListener('click',()=>{ $('rRole').value='电话销售'; $('pickSales').classList.add('active'); $('pickEditor').classList.remove('active'); });
 $('xResume').addEventListener('click',closeResume);
@@ -2118,31 +2086,7 @@ $('sendEnroll').addEventListener('click',async()=>{
   finally{ btn.textContent='一键提交报名'; btn.disabled=false; btn.style.opacity=1; }
 });
 
-/* ========= 招聘详情弹窗 ========= */
-function renderDetails(){
-  $('detailsBody').innerHTML=`<div style="display:grid;gap:12px;">`+JOBS.map((j,i)=>`
-    <div class="job">
-      <div class="jobHead">
-        <div class="jobLeft">
-          <div class="jobIcon" style="background:${colorById(i+1).bg};color:${colorById(i+1).text};border-color:${colorById(i+1).border}">${j.svg}</div>
-          <div><div class="jobName">${esc(j.name)}</div><div class="jobMeta">${esc(j.meta)}</div></div>
-        </div>
-        <span class="jobPill">${esc(j.pill)}</span>
-      </div>
-      <ul class="jobList">${j.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-      <div class="jobActions">
-        <button class="btn btnPrimary grow" data-resume="${esc(j.name)}">投递简历</button>
-        <button class="btn btnGhost grow" data-msg="岗位咨询：${esc(j.name)}">留言</button>
-      </div>
-    </div>`).join('')+`</div>`;
-  $('detailsBody').querySelectorAll('[data-resume]').forEach(b=>b.addEventListener('click',()=>{ $('detailsOv').classList.remove('show'); setTimeout(()=>openResume(b.dataset.resume),200); }));
-  $('detailsBody').querySelectorAll('[data-msg]').forEach(b=>b.addEventListener('click',()=>{ $('detailsOv').classList.remove('show'); setTimeout(()=>openMsg(b.dataset.msg),200); }));
-}
-$('heroDetail').addEventListener('click',()=>$('detailsOv').classList.add('show'));
-$('xDetails').addEventListener('click',()=>$('detailsOv').classList.remove('show'));
-$('detailsOv').addEventListener('click',e=>{ if(e.target===$('detailsOv')) $('detailsOv').classList.remove('show'); });
-
-/* ========= 清除数据 ========= */
+/* ========= 恢复出厂设置 ========= */
 $('clearBtn').addEventListener('click',()=>$('ov').classList.add('show'));
 $('xOv').addEventListener('click',()=>$('ov').classList.remove('show'));
 $('ov').addEventListener('click',e=>{ if(e.target===$('ov')) $('ov').classList.remove('show'); });
@@ -2151,7 +2095,7 @@ $('ck').addEventListener('change',e=>{ $('confirmClear').disabled=!e.target.chec
 $('confirmClear').addEventListener('click',()=>{
   localStorage.removeItem(KEY_ACCOUNT); localStorage.removeItem(KEY_LAST_VIEW);
   $('ov').classList.remove('show'); $('ck').checked=false; $('confirmClear').disabled=true;
-  paintAccount(); showToast('数据已清除，已恢复初始状态');
+  paintAccount(); showToast('已恢复出厂设置，已回到初始状态');
 });
 
 /* ========= Spotlight 全局搜索 ========= */
@@ -2162,10 +2106,8 @@ $('topSearchHint').textContent = isMac?'⌘ K':'Ctrl K';
 const PAGES=[
   {id:'home',name:'工作台首页',desc:'概览与快捷入口'},
   {id:'tools',name:'工具箱',desc:'全部工具导航'},
-  {id:'learn',name:'学习课程',desc:'AI 与创业课程'},
-  {id:'jobs',name:'招聘中心',desc:'在招岗位投递'},
-  {id:'download',name:'下载中心',desc:'网页 / APP / 安装包 / 联系支持'},
-  {id:'mine',name:'我的账号',desc:'账号与系统'},
+  {id:'learn',name:'学习课程',desc:'AI 课程 + 团队招募岗位'},
+  {id:'mine',name:'我的账号',desc:'账号 / 下载 / 联系支持'},
 ];
 function buildIndex(){
   const idx=[];
@@ -2174,7 +2116,7 @@ function buildIndex(){
   COURSES.forEach((c,i)=>{ const items=(c.items||[]).join(' '); idx.push({type:'course',name:c.name,desc:(c.tag||'')+' '+(c.time||''),blob:(c.name+' '+(c.tag||'')+' '+(c.time||'')+' '+(c.place||'')+' '+items),no:i+1}); });
   JOBS.forEach((j,i)=>idx.push({type:'job',name:j.name,desc:j.meta||'',blob:(j.name+' '+(j.meta||'')+' '+j.items.join(' ')),no:i+1}));
   const downloads=[
-    {name:'网页链接',desc:'复制网页链接打开',blob:'网页链接 下载 web 在线'},
+    {name:'网页链接',desc:'分享网页链接打开',blob:'网页链接 下载 web 在线'},
     {name:'手机 APP',desc:'安卓安装包下载',blob:'手机 app 安卓 下载 android'},
     {name:'电脑安装包',desc:'Windows 安装包下载',blob:'电脑 win windows 安装包 下载'}
   ];
@@ -2217,9 +2159,9 @@ function highlight(text,kwRaw){
 }
 
 let spotResults=[], spotActive=-1;
-const GROUP={tool:'工具',course:'课程',job:'招聘',download:'下载',page:'页面'};
+const GROUP={tool:'工具',course:'课程',job:'团队招募',download:'下载',page:'页面'};
 const GROUP_ORDER=['tool','course','job','download','page'];
-const SUGGESTS=['无水印下载','学习课程','招聘','下载中心','工具箱','我的账号'];
+const SUGGESTS=['无水印下载','学习课程','工具箱','我的账号','团队招募','下载中心'];
 
 const TYPE_ICON={
   tool:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6z"/></svg>',
@@ -2233,7 +2175,7 @@ function renderSpot(kwRaw){
   const q=norm(kwRaw).trim();
   if(!q){ renderRecent(); return; }
   const list=searchSpot(kwRaw).slice(0,30);
-  if(!list.length){ body.innerHTML='<div class="spotEmpty">没有找到「'+esc(kwRaw.trim())+'」相关内容<br>试试：无水印下载 · 课程 · 招聘 · 下载 · 工具箱</div>'; spotResults=[]; spotActive=-1; return; }
+  if(!list.length){ body.innerHTML='<div class="spotEmpty">没有找到「'+esc(kwRaw.trim())+'」相关内容<br>试试：无水印下载 · 课程 · 团队招募 · 我的账号 · 工具箱</div>'; spotResults=[]; spotActive=-1; return; }
   let html='', flat=[];
   GROUP_ORDER.forEach(g=>{
     const items=list.filter(r=>r.item.type===g);
@@ -2285,7 +2227,15 @@ function execSpot(pos){
   else if(it.type==='job'){ openResume(it.name); }
   else if(it.type==='page'){ switchView(it.pageId); }
   else if(it.type==='download'){
-    if(it.name==='网页链接'){ copyText(CONTENT.downloads.webUrl).then(ok=>showToast(ok?'已复制网页链接':'复制失败，请手动复制')); }
+    if(it.name==='网页链接'){
+      const url=CONTENT.downloads.webUrl;
+      if(navigator.share){
+        navigator.share({title:'智汇工作台 · 网页版', url}).then(()=>showToast('已分享')).catch(async e=>{
+          if(e.name==='AbortError') return;
+          const ok=await copyText(url); showToast(ok?'链接已复制（可手动分享）':'复制失败，请手动复制');
+        });
+      } else { copyText(url).then(ok=>showToast(ok?'链接已复制':'复制失败，请手动复制')); }
+    }
     else if(it.name==='手机 APP'){ openUrl(CONTENT.downloads.apkUrl); }
     else { openUrl(CONTENT.downloads.winUrl); }
   }
@@ -2320,7 +2270,7 @@ document.addEventListener('keydown',e=>{
 /* ========= 通知 ========= */
 const NOTICES=[
   {id:'recruit', title:'团队招募中', text:'剪辑操盘手 / 电话销售 长期招募，点击查看岗位详情与投递。', time:'今天'},
-  {id:'course', title:'新课即将开课', text:'AI 之道 四天四晚 · 8月15日 广东站，报名从速。', time:'本周'},
+  {id:'course', title:'新课即将开课', text:'AI 之道 四天四晚 · 8月15日 广东站；OPC 智能体创业营 6月12日，报名从速。', time:'本周'},
   {id:'sys', title:'工作台已升级', text:'新增「最近使用」与全局搜索，体验更顺手。', time:'更新于 '+CONTENT.buildDate},
 ];
 const KEY_NOTICE_READ='notice_read_v1';
@@ -2354,7 +2304,7 @@ document.addEventListener('click',e=>{
 function init(){
   $('buildDate').textContent=CONTENT.buildDate;
   renderStats(); renderQuick(); renderHomeTools(); renderHomeCourses();
-  renderToolCats(); renderToolGrid(); renderLearn(); renderJobs(); renderDetails();
+  renderToolCats(); renderToolGrid(); renderLearn();
   paintAccount(); paintGreet(); renderNotif();
   const last=localStorage.getItem(KEY_LAST_VIEW);
   if(last&&VIEWS.includes(last)&&last!=='search') switchView(last,false);
