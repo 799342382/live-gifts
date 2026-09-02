@@ -90,7 +90,7 @@
     transition:transform .28s cubic-bezier(.4,0,.2,1);
   }
   @media (max-width:860px){
-    .sidebar{position:fixed;top:0;left:0;bottom:0;max-width:84vw;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+    .sidebar{position:fixed;top:0;left:0;bottom:0;max-width:84vw;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;}
   }
   .brand{display:flex;align-items:center;gap:11px;padding:6px 8px 14px;}
   .brandLogo{
@@ -187,7 +187,7 @@
     box-shadow:0 8px 18px rgba(31,36,48,.18);
   }
 
-  .scroller{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 22px 28px;display:flex;flex-direction:column;}
+  .scroller{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 22px 28px;display:flex;flex-direction:column;scrollbar-gutter:stable;}
   .container{width:100%;max-width:none;margin:0 auto;flex:1;display:flex;flex-direction:column;}
 
   /* 视图切换 */
@@ -950,6 +950,10 @@
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path d="M4.5 7h15A1.5 1.5 0 0 1 21 8.5v10A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-10A1.5 1.5 0 0 1 4.5 7Z"/><path d="M9 13h6"/><path d="M12 10v6"/></svg></span>
         工具箱
       </div>
+      <div class="navItem" data-view="agents">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><circle cx="9" cy="13" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r=".8" fill="currentColor" stroke="none"/><path d="M12 2v3"/><path d="M9.5 17h5"/></svg></span>
+        智能体
+      </div>
       <div class="navItem" data-view="learn">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg></span>
         学习课程
@@ -1056,6 +1060,12 @@
           <div class="catTabs" id="toolCats"></div>
           <div class="grid" id="toolGrid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));"></div>
           <div class="searchHint" id="toolEmpty" style="display:none;">该分类下暂无工具，去「学习课程」看看吧。</div>
+        </section>
+
+        <!-- ========== 智能体 ========== -->
+        <section class="view" id="view-agents">
+          <div class="secHead"><h2><span class="bar"></span>智能体</h2></div>
+          <div class="grid" id="agentGrid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));"></div>
         </section>
 
         <!-- ========== 学习课程（含团队招募，团队招募置顶） ========== -->
@@ -1257,6 +1267,10 @@
     <div class="bTab" data-view="tools">
       <span class="bIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path d="M4.5 7h15A1.5 1.5 0 0 1 21 8.5v10A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-10A1.5 1.5 0 0 1 4.5 7Z"/><path d="M9 13h6"/><path d="M12 10v6"/></svg></span>
       <span class="bTxt">工具</span>
+    </div>
+    <div class="bTab" data-view="agents">
+      <span class="bIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><circle cx="9" cy="13" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r=".8" fill="currentColor" stroke="none"/><path d="M12 2v3"/><path d="M9.5 17h5"/></svg></span>
+      <span class="bTxt">智能体</span>
     </div>
     <div class="bTab" data-view="learn">
       <span class="bIco"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg></span>
@@ -1495,6 +1509,9 @@ const CONTENT = {
     { tier:'learn', name:'OPC 轻资产创业营', url:'https://nddm6.xetslk.com/s/4yrzy9', desc:'轻资产创业实操' },
     { tier:'learn', name:'智能体大全', url:'https://nddm6.xetslk.com/s/VDX6x', desc:'AI 智能体合集' },
   ],
+  agents: [
+    { name:'小说智能体', url:'https://799342382.github.io/xiaoshuo-collector/', desc:'小说素材搜集与创作辅助' },
+  ],
   courses: [
     { name:'AI 之道', tag:'四天四晚', time:'2026年8月15日 - 8月18日', place:'广东',
       items:['AI 变现六大赛道','一人顶一个团队','AI 写爆款文案','AI 打造个人 IP','本地商家 AI 引流','AI 生成直播脚本','企业 AI 降本增效','选对赛道快变现'],
@@ -1597,7 +1614,7 @@ $('xHelp').addEventListener('click',closeHelp);
 $('helpOv').addEventListener('click',e=>{ if(e.target===$('helpOv')) closeHelp(); });
 
 /* ========= 视图切换 ========= */
-const VIEWS=['home','tools','learn','mine','search'];
+const VIEWS=['home','tools','agents','learn','mine','search'];
 function switchView(v,save=true){
   VIEWS.forEach(x=>{ const el=$('view-'+x); if(el) el.classList.toggle('active',x===v); });
   document.querySelectorAll('.navItem[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v));
@@ -1750,6 +1767,24 @@ function renderHomeCourses(){
     el.addEventListener('click',()=>openEnroll(el.dataset.course));
   });
   animateChildren($('homeCourses'),'.tool','anim-fadeUp');
+}
+
+/* ========= 渲染：智能体（AI 做的智能体集合，点击跳外链） ========= */
+function renderAgents(){
+  const grid=$('agentGrid'); if(!grid) return;
+  const list=CONTENT.agents||[];
+  if(!list.length){
+    grid.innerHTML='<div class="searchHint" style="grid-column:1/-1;text-align:center;padding:14px 0;">还没有添加智能体，把名字和链接发给我即可加入这里。</div>';
+    return;
+  }
+  grid.innerHTML=list.map((a,i)=>`
+    <div class="tool" data-url="${esc(a.url)}" style="cursor:pointer;">
+      <div class="num" style="background:${colorById(i+1).bg};color:${colorById(i+1).text};border-color:${colorById(i+1).border}">${i+1}</div>
+      <div class="nm"><b>${esc(a.name)}</b><span>${esc(a.desc||'点击前往对话')}</span></div>
+      <div class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div>
+    </div>`).join('');
+  grid.querySelectorAll('.tool').forEach(el=>el.addEventListener('click',()=>openUrl(el.dataset.url)));
+  animateChildren(grid,'.tool','anim-fadeUp');
 }
 
 /* ========= 渲染：工具箱（分类） ========= */
@@ -2303,7 +2338,7 @@ document.addEventListener('click',e=>{
 /* ========= 初始化 ========= */
 function init(){
   $('buildDate').textContent=CONTENT.buildDate;
-  renderStats(); renderQuick(); renderHomeTools(); renderHomeCourses();
+  renderStats(); renderQuick(); renderHomeTools(); renderHomeCourses(); renderAgents();
   renderToolCats(); renderToolGrid(); renderLearn();
   paintAccount(); paintGreet(); renderNotif();
   const last=localStorage.getItem(KEY_LAST_VIEW);
