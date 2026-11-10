@@ -1460,7 +1460,6 @@
 /* ===== 悬浮音乐碟 ===== */
 .music-fab{position:fixed;right:18px;bottom:74px;width:60px;height:60px;z-index:99990;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;display:flex;align-items:center;justify-content:center;}
 .music-fab:active{transform:scale(.94);}
-.music-fab.hide{display:none;}
 .music-disc{width:60px;height:60px;border-radius:50%;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,#202020 0 30%,#161616 30% 100%),repeating-radial-gradient(circle at 50% 50%,#141414 0 2px,#242424 2px 4px);border:3px solid #0b0b0b;box-shadow:0 8px 20px rgba(0,0,0,.35),inset 0 0 0 2px rgba(255,255,255,.05);}
 .music-disc::before{content:'';position:absolute;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#3a7bd5,#2a5298);box-shadow:0 0 0 3px rgba(255,255,255,.08);}
 .music-note{position:relative;z-index:2;color:#fff;font-size:13px;line-height:1;}
@@ -1468,17 +1467,19 @@
 .music-fab.bg-ready .music-disc{animation:musicBgPulse 2s ease-out infinite;}
 @keyframes musicBgPulse{0%{box-shadow:0 0 0 0 rgba(42,82,152,.45);}70%{box-shadow:0 0 0 13px rgba(42,82,152,0);}100%{box-shadow:0 0 0 0 rgba(42,82,152,0);}}
 @keyframes musicSpin{to{transform:rotate(360deg);}}
-/* 播放时圆盘外圈的声波涟漪 */
-.music-wave{position:absolute;left:50%;top:50%;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;border:2px solid rgba(42,82,152,.5);opacity:0;pointer-events:none;z-index:1;}
-.music-fab.spinning .music-wave{animation:musicWave 1.8s ease-out infinite;}
-.music-fab.spinning .music-wave.w2{animation-delay:.6s;}
-.music-fab.spinning .music-wave.w3{animation-delay:1.2s;}
-@keyframes musicWave{0%{transform:scale(1);opacity:.6;}80%{opacity:.12;}100%{transform:scale(2.2);opacity:0;}}
-.music-min{position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:18px;padding:0;cursor:pointer;display:none;}
-.music-fab:hover .music-min{display:block;}
-@media(hover:none){.music-min{display:flex;}}
-.music-min-dot{position:fixed;right:18px;bottom:74px;width:34px;height:34px;border-radius:50%;background:#1c1c1c;color:#fff;display:none;align-items:center;justify-content:center;font-size:14px;z-index:99990;box-shadow:0 4px 12px rgba(0,0,0,.35);cursor:pointer;}
-.music-min-dot.show{display:flex;}
+/* 播放时圆盘外圈的雷电爆闪 */
+.music-wave{position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;opacity:0;pointer-events:none;z-index:1;border:2px solid rgba(90,160,255,.85);box-shadow:0 0 0 0 rgba(120,180,255,0);}
+.music-fab.spinning .music-wave{animation:musicBolt .85s cubic-bezier(.2,.7,.3,1) infinite;}
+.music-fab.spinning .music-wave.w2{animation-delay:.28s;}
+.music-fab.spinning .music-wave.w3{animation-delay:.56s;}
+@keyframes musicBolt{
+  0%{transform:scale(.9);opacity:0;border-color:rgba(120,180,255,.9);box-shadow:0 0 0 0 rgba(150,200,255,.8);}
+  7%{opacity:1;border-color:#ffffff;box-shadow:0 0 18px 6px rgba(175,215,255,.98);}
+  9%{opacity:.55;border-color:rgba(255,255,255,.9);box-shadow:0 0 22px 5px rgba(150,200,255,.7);}
+  11%{opacity:1;border-color:#ffffff;box-shadow:0 0 24px 7px rgba(180,220,255,.98);}
+  32%{transform:scale(1.6);opacity:.55;border-color:rgba(90,160,255,.85);box-shadow:0 0 28px 10px rgba(120,180,255,.5);}
+  100%{transform:scale(2.5);opacity:0;border-color:rgba(42,82,152,0);box-shadow:0 0 0 0 rgba(42,82,152,0);}
+}
 .music-panel{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(430px,100%);background:#fff;border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.18);z-index:99995;padding:18px 16px calc(18px + env(safe-area-inset-bottom));display:none;flex-direction:column;gap:14px;max-height:80vh;}
 .music-panel.open{display:flex;}
 @media(min-width:861px){.music-panel{top:50%;bottom:auto;transform:translate(-50%,-50%);border-radius:18px;width:380px;max-height:86vh;box-shadow:0 16px 50px rgba(0,0,0,.25);}}
@@ -6163,9 +6164,7 @@ if('serviceWorker' in navigator){
   <div class="music-wave w2"></div>
   <div class="music-wave w3"></div>
   <div class="music-disc"><span class="music-note">&#9834;</span></div>
-  <button class="music-min" aria-label="收起音乐">&#8722;</button>
 </div>
-<div id="musicMin" class="music-min-dot" title="展开音乐">&#9834;</div>
 <div id="musicPanel" class="music-panel">
   <div class="music-panel-head">
     <div class="music-big-disc"></div>
@@ -6212,14 +6211,11 @@ if('serviceWorker' in navigator){
 (function(){
   const TRACKS = [
   {"name":"手机发疯了","file":"music/手机发疯了.mp3"},
-  {"name":"野心开闸 1","file":"music/1.mp3"},
-  {"name":"野心开闸 2","file":"music/2.mp3"},
-  {"name":"野心开闸 3","file":"music/3.mp3"},
+  {"name":"野心开闸","file":"music/2.mp3"},
   {"name":"今天也很好（顶配版）","file":"music/今天也很好（顶配版）.mp3"},
   {"name":"智启未来","file":"music/智启未来.mp3"}
 ];
   const fab=document.getElementById('musicFab');
-  const minDot=document.getElementById('musicMin');
   const panel=document.getElementById('musicPanel');
   const audio=document.getElementById('musicAudio');
   const titleEl=panel.querySelector('.music-title');
@@ -6234,7 +6230,6 @@ if('serviceWorker' in navigator){
   const nextBtn=panel.querySelector('.music-next');
   const listEl=panel.querySelector('.music-list');
   const closeBtn=panel.querySelector('.music-close');
-  const minBtn=fab.querySelector('.music-min');
   const volSlider=document.getElementById('musicVol');
   const volVal=document.getElementById('musicVolVal');
   const modeBtn=document.getElementById('musicModeBtn');
@@ -6365,12 +6360,9 @@ if('serviceWorker' in navigator){
     if(!e.target.isConnected) return; // 目标已脱离文档（如点歌触发的列表重渲染），按面板内处理，不关闭
     if(e.target.closest('#musicPanel')) return;
     if(e.target.closest('#musicFab')) return;
-    if(e.target.closest('#musicMin')) return;
     panel.classList.remove('open');
   });
-  fab.addEventListener('click',function(e){ if(e.target.closest('.music-min')) return; togglePanel(); });
-  minBtn.addEventListener('click',function(e){ e.stopPropagation(); fab.classList.add('hide'); minDot.classList.add('show'); });
-  minDot.addEventListener('click',function(){ fab.classList.remove('hide'); minDot.classList.remove('show'); });
+  fab.addEventListener('click',function(){ togglePanel(); });
   applyVol(vol);
   applyMode(mode);
   applyBg();
