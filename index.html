@@ -1169,6 +1169,15 @@
   .ntSetStatus span:last-child{margin-left:auto;font-size:11px;color:var(--muted-2);font-weight:800;}
   .ntSetBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
   .ntSetBtns .btn{font-size:11.5px;padding:8px 12px;min-width:0;}
+  /* 本机笔记库（手机上等同「文件管理器」：看得到存哪、能整库清空） */
+  .ntDataSec{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+  .ntDataSet{margin:2px 0 10px;padding:11px 12px;border:1px solid var(--line);border-radius:9px;
+    background:rgba(47,111,184,.03);font-size:12.5px;font-weight:900;line-height:1.7;}
+  .ntDataSet .ntDataPath{font-size:11px;font-weight:800;color:var(--muted-2);margin-top:6px;line-height:1.6;}
+  .ntDataBtns{display:flex;gap:8px;}
+  .ntDataBtns .btn{font-size:12px;padding:9px 12px;}
+  .btnDanger.confirm{color:#fff;background:var(--danger);border-color:var(--danger);}
+  .ntDataHint{font-size:10.5px;color:var(--muted-2);font-weight:700;line-height:1.65;margin-top:9px;}
   /* 保存进度（与编辑框里的进度条同步） */
   .ntSetSave{padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);}
   .ntSetSaveTop{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11.5px;font-weight:800;}
@@ -2001,6 +2010,15 @@
       <button class="btn btnPrimary ntAddrPickBtn" id="ntAddrPickBtn" type="button">选择文件夹</button>
       <div class="ntAddrHelp" id="ntAddrHelp">会打开电脑的文件夹窗口，挑一个位置就行。</div>
       <input type="file" id="ntAddrDirInput" webkitdirectory directory multiple class="ntFileHidden" />
+      <div class="ntDataSec" id="ntDataSec">
+        <div class="ntSetSecTitle">本机笔记库 <span id="ntDataStat">—</span></div>
+        <div class="ntDataSet" id="ntDataSet"></div>
+        <div class="ntDataBtns">
+          <button class="btn btnGhost grow" id="ntDataExport" type="button">导出备份到手机</button>
+          <button class="btn btnDanger grow" id="ntDataWipe" type="button">删除全部笔记</button>
+        </div>
+        <div class="ntDataHint" id="ntDataHint"></div>
+      </div>
     </div>
   </div>
 
@@ -3716,6 +3734,7 @@ function ntAddrBtnText(){
 }
 function ntSetOpen(){
   ntRenderAddr();
+  ntRenderDataSec();
   const ov=$('ntSetOv'); if(ov) ov.classList.add('show');
   ntDirSweep();   /* 每次打开位置面板，顺手看看有没有残留文件 */
 }
@@ -4027,6 +4046,81 @@ function ntRenderSetFiles(){
     if(ntSetDelAsk!==key){ ntSetDelAsk=key; ntRenderSetFiles(); return; }
     await ntDeleteOneFile(b.dataset.nid,b.dataset.fid);
   }));
+}
+/* 本机笔记库（文件管理器视图）：清楚显示存哪、占多少，提供整库清空 */
+let ntWipeAsk=false, ntWipeTimer=null;
+function ntRenderDataSec(){
+  const stat=$('ntDataStat'), set=$('ntDataSet'); if(!set) return;
+  const n=ntItems.length;
+  const size=ntItems.reduce((a,x)=>a+ntNoteSize(x),0);
+  if(stat) stat.textContent = n ? (n+' 条') : '空';
+  const path = isMobile
+    ? '本机浏览器（应用私有空间）· 不上传云端'
+    : (ntDirHandle ? ('文件夹「'+(ntDirHandle.name||'')+'」+ 浏览器本机') : '浏览器本机');
+  set.innerHTML = '共 '+n+' 条 · 占用 '+(ntSizeText(size)||'0 B')
+    + '<div class="ntDataPath">'+ntEsc(path)+'</div>';
+  const w=$('ntDataWipe'); if(w) w.disabled = (n===0 && !ntFolders.length);
+  const hint=$('ntDataHint');
+  if(hint) hint.textContent = isMobile
+    ? '笔记自动存在这台手机（浏览器私有空间），不上传云端。点「导出备份到手机」会把笔记存成一个文件放进你手机的「文件管理 / 下载」，想删直接在文件管理里删；点「删除全部笔记」会清空这台手机上的所有笔记。'
+    : '笔记存在本机。点「导出备份」可存一份 .json 到电脑；点「删除全部笔记」清空本机所有笔记（已绑定的电脑文件夹里的附件也会一起删）。';
+}
+/* 删除全部笔记：像在文件管理器里删掉整个笔记库（二次确认 + 清真实文件夹 + 清浏览器库） */
+async function ntWipeAll(){
+  const n=ntItems.length;
+  if(!n && !ntFolders.length){
+    if(ntWipeAsk){ ntWipeAsk=false; const b=$('ntDataWipe'); if(b){ b.classList.remove('confirm'); b.textContent='删除全部笔记'; } }
+    showToast('目前没有笔记可删','warn'); return;
+  }
+  const b=$('ntDataWipe');
+  if(!ntWipeAsk){
+    ntWipeAsk=true;
+    if(b){ b.classList.add('confirm'); b.textContent='确认删除全部？不可恢复'; }
+    clearTimeout(ntWipeTimer);
+    ntWipeTimer=setTimeout(()=>{ ntWipeAsk=false; if(b){ b.classList.remove('confirm'); b.textContent='删除全部笔记'; } },5000);
+    return;
+  }
+  clearTimeout(ntWipeTimer); ntWipeAsk=false;
+  if(b){ b.disabled=true; b.classList.remove('confirm'); b.textContent='正在清空…'; }
+  try{
+    /* 桌面绑定了文件夹：把「附件」里的真实文件全删掉，等于清空这个文件夹 */
+    if(ntDirHandle){
+      try{
+        const sub=await ntDirSub(false);
+        if(sub && sub.values){
+          const names=[];
+          for await(const e of sub.values()){ if(e.kind==='file') names.push(e.name); }
+          for(const nm of names){ try{ await sub.removeEntry(nm); }catch(e){} }
+        }
+      }catch(e){}
+      try{ ntDirHandle=null; ntDirPerm='';
+        if(ntMode==='idb') await ntIDB('meta','readwrite',os=>os.delete('dir')); }catch(e){}
+    }
+    /* 清空浏览器库里的全部笔记 + 大文件（含 fallback 的 localStorage） */
+    if(ntMode==='idb'){
+      await ntIDB('notes','readwrite',os=>os.clear());
+      await ntIDB('videos','readwrite',os=>os.clear());
+      await ntIDB('meta','readwrite',os=>os.clear());
+    }else{
+      try{ localStorage.removeItem(NT_FB); }catch(e){}
+    }
+    ntItems=[]; ntFolders=[];
+    try{ localStorage.removeItem(NT_FOLDERS); }catch(e){}
+    try{ localStorage.removeItem(NT_ADDR_KEY); }catch(e){}
+    try{ localStorage.removeItem(NT_PENDING_DEL_KEY); }catch(e){}
+    ntPicked=null; ntAddrBroken=false;
+    if(ntSessionBlobs){ for(const k in ntSessionBlobs) delete ntSessionBlobs[k]; }
+    ntSelected.clear(); ntSelectMode=false;
+    if(typeof ntClosePlay==='function') ntClosePlay();
+    ntRender(); ntRenderSelBar(); ntRenderDataSec(); ntRenderAddr();
+    if(typeof ntRenderWhere==='function') ntRenderWhere();
+    showToast('已清空：这台手机上的笔记全部删掉了。导出过的备份文件还在你手机「文件管理」里，需要的话去那里删。','ok');
+    ntSetClose();
+  }catch(e){
+    showToast('清空时出错，请再试一次','err');
+  }finally{
+    if(b){ b.disabled=false; b.classList.remove('confirm'); b.textContent='删除全部笔记'; }
+  }
 }
 function ntRenderWhere(){
   const rows=$('ntSetAddr'); if(!rows){ ntRenderAddr(); return; }
@@ -5921,6 +6015,9 @@ async function ntInit(){
   });
   $('ntAddrPickBtn').addEventListener('click',ntChooseAddr);
   $('ntAddrDirInput').addEventListener('change',ntAddrDirChosen);
+  /* 本机笔记库：导出备份 + 删除全部（文件管理器视图） */
+  $('ntDataExport').addEventListener('click',()=>{ if(isMobile) ntAddrSet('本机存储','mobile'); ntTakeFile(); });
+  $('ntDataWipe').addEventListener('click',ntWipeAll);
   /* 隐藏面板里的旧按钮仍保留绑定，避免影响原有文件夹逻辑 */
   $('ntSetPick').addEventListener('click',ntPickDir);
   $('ntSetChange').addEventListener('click',ntPickDir);
