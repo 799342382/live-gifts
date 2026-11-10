@@ -3741,17 +3741,17 @@ function ntRenderAddr(){
   const btn=$('ntAddrPickBtn');
   if(btn){
     if(broken) btn.textContent='重新选择位置';
-    else if(ready) btn.textContent='换一个位置';
+    else if(ready) btn.textContent = isMobile ? '导出备份' : '换一个位置';
     else btn.textContent = isMobile ? '选择保存位置' : (window.showDirectoryPicker?'选择文件夹':'选择保存位置');
   }
   const help=$('ntAddrHelp');
   if(help){
     if(broken) help.textContent='之前选的位置已不在，点上面按钮在系统里重新选一个。';
     else if(ready) help.textContent = isMobile
-      ? ('笔记保存在你选的位置：'+label+'。想换位置点上面按钮。')
+      ? '笔记已自动存在这台手机上，点上面按钮可再导出一份备份到你挑的位置（文件 App / 下载 / Drive 等）。'
       : (ntAddrDirOK()?'笔记文字在「我的笔记.txt」，视频、图片、文件在「附件」里，全部都在这个文件夹。':'笔记存在这台设备。想换位置，点上面按钮。');
     else help.textContent = isMobile
-      ? '手机浏览器不能直接写文件夹。点下面按钮，在系统弹窗里挑一个位置（如「文件 App / 下载」），笔记就会存到那里。'
+      ? '手机浏览器不能直接绑定文件夹。点下面按钮，系统会让你挑一个位置把笔记备份存过去（文件 App / 下载 / Drive 等）；笔记本身也会自动存在这台手机上。'
       : (window.showDirectoryPicker
         ? '会打开电脑的文件夹窗口，挑一个位置就行。'
         : (window.showSaveFilePicker
@@ -3850,11 +3850,11 @@ async function ntChooseAddr(){
   try{
     /* 手机：直接走手机流程，不看 showDirectoryPicker（手机模式可能把它误报成「有」却打不开） */
     if(isMobile){
-      if(isAndroid){
-        const inp=$('ntAddrDirInput');
-        if(inp && ('webkitdirectory' in inp)){ inp.value=''; inp.click(); return; }
-      }
-      ntAddrSet('系统保存窗口','download');
+      /* 手机浏览器无法持久绑定文件夹：安卓的 webkitdirectory 只能选文件、无法选中文件夹，
+         所以之前点「选文件夹」会停在空目录、完成按钮置灰、选不了。
+         改为：直接把笔记导出备份文件，由系统在分享/下载面板里让你挑真实位置
+         （文件 App / 下载 / Drive 等）——这才是手机上真正能用的「选位置」。 */
+      ntAddrSet('本机存储','mobile');
       ntTakeFile();
       ntSetClose();
       return;
