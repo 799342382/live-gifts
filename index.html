@@ -187,7 +187,8 @@
     box-shadow:0 8px 18px rgba(31,36,48,.18);
   }
 
-  .scroller{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 22px 28px;display:flex;flex-direction:column;scrollbar-gutter:stable;}
+  /* 桌面底部留白与页脚上方间距对称（手机断点仍保留 64px 给底部 Tab） */
+  .scroller{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 22px 10px;display:flex;flex-direction:column;scrollbar-gutter:stable;}
   .container{width:100%;max-width:none;margin:0 auto;flex:1;display:flex;flex-direction:column;}
 
   /* 视图切换 */
@@ -521,7 +522,7 @@
   /* 通道选择列表 */
   .channel{display:flex;flex-direction:column;gap:12px;margin-top:6px;}
 
-  /* 联系与支持 - 浅色专业主题 */
+  /* 留言板 - 浅色专业主题 */
   .supportCard{background:var(--surface);color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow);}
   .supportTop{display:flex;gap:16px;align-items:flex-start;}
   .supportIcon{width:48px;height:48px;border-radius:15px;background:#f1f5f9;color:var(--text);display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(31,36,48,.06);}
@@ -541,7 +542,28 @@
   #sendMsg:hover,#sendMsgPop:hover{background:#235a98;transform:translateY(-1px);box-shadow:0 14px 30px rgba(47,111,184,.24);}
   @media (max-width:560px){.formGrid{grid-template-columns:1fr;}.supportTop{flex-direction:column;gap:12px;}}
 
-  /* 下载中心内的联系与支持 */
+  /* 联系表单：诚实提示框（无 emoji） */
+  .supportInfo{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.7;color:rgba(31,36,48,.82);background:rgba(47,111,184,.06);border:1px solid rgba(47,111,184,.16);border-left:3px solid #2f6fb8;border-radius:12px;padding:11px 13px;margin-bottom:16px;}
+  .supportInfo b{color:#235a98;font-weight:900;flex:0 0 auto;margin-right:2px;}
+  /* 回复条件提示（琥珀色，区别于蓝色说明框） */
+  .replyHint{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.6;color:#8a5a12;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:10px;padding:9px 12px;margin:0 0 12px;}
+  .replyHint b{color:#b45309;font-weight:900;flex:0 0 auto;}
+
+  /* 恢复出厂设置：警示卡片 + 确认框双色清单 */
+  .resetCard{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.22);}
+  .resetDesc{font-size:12.5px;line-height:1.75;color:rgba(31,36,48,.78);margin:10px 0 0;}
+  .resetDesc b{color:#b91c1c;}
+  .resetLead{font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.6;}
+  .resetGroup{margin-bottom:12px;}
+  .rgTitle{font-size:12px;font-weight:900;margin-bottom:6px;padding-left:11px;position:relative;line-height:1.4;}
+  .rgTitle::before{content:"";position:absolute;left:0;top:1px;bottom:1px;width:3px;border-radius:2px;}
+  .rgDel{color:#b91c1c;} .rgDel::before{background:#ef4444;}
+  .rgKeep{color:#15803d;} .rgKeep::before{background:#22c55e;}
+  .resetGroup ul{margin:0;padding-left:20px;font-size:12.5px;line-height:1.85;color:rgba(31,36,48,.82);}
+  .resetCheck{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.72);border:1px solid var(--stroke);margin-top:4px;}
+  .resetCheck label{font-size:13px;font-weight:700;color:rgba(31,36,48,.8);cursor:pointer;}
+
+  /* 下载中心内的留言板 */
   .dlSupport{scroll-margin-top:22px;}
   .spGrid{display:grid;grid-template-columns:1fr;gap:14px;align-items:start;}
   .dlSupport .card{box-shadow:none;}
@@ -727,10 +749,11 @@
     .qeName{font-size:14px;}
     .qeDesc{display:none;}
     .qeArrow{display:none;}
-    .siteFooter{padding:22px 4px 8px;}
-    .siteFooter .sfLine{font-size:11px;}
-    .siteFooter .sfLinks{margin-top:8px;font-size:11px;}
-    .siteFooter .sfNote{margin-top:8px;font-size:10px;}
+    .siteFooter{padding:0 4px 8px;}
+    .siteFooter::before{height:32px;margin-bottom:14px;}
+    .siteFooter .sfLine{font-size:10.5px;}
+    .siteFooter .sfLinks{margin-top:6px;font-size:10.5px;}
+    .siteFooter .sfNote{margin-top:6px;font-size:10px;}
   }
   @media (max-width:480px){
     .topbar{gap:8px;}
@@ -811,13 +834,14 @@
     body *{ visibility:hidden !important; }
   }
   /* 站点页脚 */
-  .siteFooter{ margin-top:auto; padding:28px 4px 8px; border-top:1px solid var(--line); text-align:center; color:var(--muted-2); }
-  .siteFooter .sfLine{ font-size:12.5px; font-weight:800; color:var(--muted); }
-  .siteFooter .sfLinks{ margin-top:10px; font-size:12.5px; }
-  .siteFooter .sfLinks a{ color:var(--primary); text-decoration:none; font-weight:700; }
+  .siteFooter{ margin-top:auto; padding:0 4px 8px; text-align:center; color:var(--muted-2); }
+  .siteFooter::before{content:"";display:block;height:44px;border-bottom:1px solid var(--line-soft);margin-bottom:18px;}
+  .siteFooter .sfLine{ font-size:11px; font-weight:700; color:var(--muted-2); }
+  .siteFooter .sfLinks{ margin-top:7px; font-size:11px; }
+  .siteFooter .sfLinks a{ color:var(--primary); text-decoration:none; font-weight:600; }
   .siteFooter .sfLinks a:hover{ text-decoration:underline; }
-  .siteFooter .sfSep{ margin:0 9px; color:var(--line); }
-  .siteFooter .sfNote{ margin:10px auto 0; font-size:11.5px; line-height:1.7; max-width:560px; }
+  .siteFooter .sfSep{ margin:0 7px; color:var(--line); }
+  .siteFooter .sfNote{ margin:6px auto 0; font-size:10px; line-height:1.6; max-width:620px; color:var(--muted-2); }
   /* 帮助中心 */
   .helpList{ display:flex; flex-direction:column; gap:10px; }
   .helpItem{ background:rgba(47,111,184,.04); border:1px solid rgba(47,111,184,.12); border-radius:14px; padding:14px 16px; }
@@ -1023,7 +1047,21 @@
     border-radius:9px;padding:8px 12px;cursor:pointer;}
   .ntBar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
   .ntBar #ntSearch{flex:1 1 190px;min-width:0;box-sizing:border-box;}
-  .ntSort{flex:0 0 120px;width:120px;}
+  /* 工具栏统一规格：一行控件同高、同圆角、同字号，避免排序框显得偏大 */
+  .ntBar{align-items:center;}
+  .ntBar > *{margin-bottom:0;}
+  .ntBar #ntSearch,.ntBar #ntSort,.ntBar .ntSelectToggle,.ntBar .ntWhereBtn{
+    box-sizing:border-box;height:32px;min-height:32px;margin-bottom:0;
+    padding:0 12px;line-height:30px;
+    font-family:inherit;font-size:11.5px;font-weight:800;color:var(--muted);
+    background:var(--surface);border:1px solid var(--line);border-radius:8px;outline:none;
+  }
+  .ntBar #ntSearch::placeholder{color:var(--muted-2);font-weight:700;}
+  .ntBar #ntSort{flex:0 0 96px;width:96px;padding-right:24px;cursor:pointer;
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 8px center;}
+  .ntBar .ntChipBtn{height:28px;min-height:28px;display:inline-flex;align-items:center;box-sizing:border-box;}
   .ntFolders{display:flex;gap:6px;flex-wrap:wrap;align-items:center;flex:1 1 auto;}
   .ntFolderWrap{display:inline-flex;align-items:center;gap:4px;}
   .ntChipBtn{font-size:11.5px;font-weight:800;color:var(--muted);background:var(--surface);
@@ -1439,11 +1477,15 @@
     .ntList{grid-template-columns:1fr;}
     .ntTip{display:none;}
     .ntComposeFoot .btn{flex:1;}
+    .ntBar{gap:8px;}
     .ntBar #ntSearch{flex:1 1 100%;}
-    .ntSort{flex:0 0 112px;width:112px;}
+    .ntBar .ntFolders{flex:1 1 100%;}
+    .ntBar #ntSort{flex:0 0 96px;width:96px;font-size:11px;padding:0 8px;padding-right:22px;background-position:right 6px center;}
+    .ntBar .ntSelectToggle,.ntBar .ntWhereBtn{flex:0 0 auto;}
     .ntRelink span{flex:1 1 100%;}
     .ntSelBar{gap:6px;padding:9px 10px;}
-    .ntSelOp,.ntSelectToggle,.ntWhereBtn{font-size:11px;padding:7px 9px;}
+    .ntSelOp{font-size:11px;padding:7px 9px;}
+    .ntBar .ntSelectToggle,.ntBar .ntWhereBtn{font-size:11px;padding:0 9px;}
     .ntSelCount{flex:1 1 100%;margin-right:0;}
     .ntSetOv{padding:10px;}
     .ntSetBox{max-height:92vh;}
@@ -1480,9 +1522,20 @@
   32%{transform:scale(1.6);opacity:.55;border-color:rgba(90,160,255,.85);box-shadow:0 0 28px 10px rgba(120,180,255,.5);}
   100%{transform:scale(2.5);opacity:0;border-color:rgba(42,82,152,0);box-shadow:0 0 0 0 rgba(42,82,152,0);}
 }
-.music-panel{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(430px,100%);background:#fff;border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.18);z-index:99995;padding:18px 16px calc(18px + env(safe-area-inset-bottom));display:none;flex-direction:column;gap:14px;max-height:80vh;}
+/* 手机：音乐面板全屏铺满；电脑（861px 起）保持居中弹窗不变 */
+.music-scrim{position:fixed;inset:0;z-index:99988;background:rgba(16,18,24,.42);display:none;}
+.music-scrim.open{display:block;}
+.music-panel{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;background:#fff;border-radius:0;box-shadow:none;z-index:99995;padding:calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));display:none;flex-direction:column;gap:14px;max-height:none;overflow:hidden;}
 .music-panel.open{display:flex;}
-@media(min-width:861px){.music-panel{top:50%;bottom:auto;transform:translate(-50%,-50%);border-radius:18px;width:380px;max-height:86vh;box-shadow:0 16px 50px rgba(0,0,0,.25);}}
+@media(max-width:860px){
+  .music-scrim{display:none!important;}
+  .music-panel > *{flex:0 0 auto;}
+  .music-panel > .music-list{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;}
+}
+@media(min-width:861px){
+  .music-scrim{display:none!important;}
+  .music-panel{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);border-radius:18px;width:380px;max-height:86vh;box-shadow:0 16px 50px rgba(0,0,0,.25);}
+}
 .music-panel-head{display:flex;align-items:center;gap:12px;}
 .music-big-disc{width:64px;height:64px;border-radius:50%;position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,#202020 0 30%,#161616 30% 100%),repeating-radial-gradient(circle at 50% 50%,#141414 0 2px,#242424 2px 4px);border:3px solid #0b0b0b;box-shadow:inset 0 0 0 2px rgba(255,255,255,.05);cursor:pointer;}
 .music-big-disc::before{content:'';position:absolute;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#3a7bd5,#2a5298);}
@@ -1862,7 +1915,7 @@
           <div class="ntEmpty" id="ntEmpty" style="display:none;">还没有记录</div>
         </section>
 
-        <!-- ========== 我的账号（含下载中心 / 联系与支持） ========== -->
+        <!-- ========== 我的账号（含下载中心 / 留言板） ========== -->
         <section class="view" id="view-mine">
           <div class="secHead"><h2><span class="bar"></span>我的账号</h2></div>
 
@@ -1969,51 +2022,54 @@
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                     </div>
                     <div class="dlCardTitleWrap">
-                      <div class="dlCardTitle">反馈与客服</div>
-                      <div class="dlCardSub">问题 / 建议 / 商务咨询</div>
+                      <div class="dlCardTitle">留言板</div>
+                      <div class="dlCardSub">想说什么就写下来</div>
                     </div>
                   </div>
                   <div class="dlMeta">
-                    <span>工作日优先</span>
-                    <span>邮件回复</span>
+                    <span>留言可看到</span>
+                    <span>留联系方式才可回复</span>
                   </div>
                   <button class="btn btnPrimary" id="goSupportBtn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    联系我们
+                    写留言
                   </button>
-                  <div class="dlNote">工作日 9:00–18:00 优先处理，其余时间看到即回复。</div>
+                  <div class="dlNote">留言送达平台所有者邮箱；想收到回复请留下邮箱或电话，不留就无法回复。不提供技术支持，也不承担任何责任。</div>
                 </div>
               </div>
             </div>
 
-            <!-- 联系与支持 -->
-            <div class="secHead" id="contactSection" style="margin-top:var(--gap);margin-bottom:14px;"><h2><span class="bar"></span>联系与支持</h2></div>
+            <!-- 留言板 -->
+            <div class="secHead" id="contactSection" style="margin-top:var(--gap);margin-bottom:14px;"><h2><span class="bar"></span>留言板</h2></div>
             <div class="spGrid">
               <div class="card">
+                <div class="supportInfo"><b>先说清楚</b> 留言能看到。<b>想收到回复，请填邮箱或电话</b>；没填就无法回复。是否回复由平台自行决定，不提供技术支持，也不承担任何责任。</div>
                 <div class="typePicker" id="msgTypePicker">
-                  <button class="typeBtn active" data-topic="综合咨询" type="button">综合咨询</button>
-                  <button class="typeBtn" data-topic="功能建议" type="button">功能建议</button>
-                  <button class="typeBtn" data-topic="其他问题" type="button">其他问题</button>
-                  <button class="typeBtn" data-topic="工具反馈" type="button">工具反馈</button>
-                  <button class="typeBtn" data-topic="商务合作" type="button">商务合作</button>
+                  <button class="typeBtn active" data-topic="随便说说" type="button">随便说说</button>
+                  <button class="typeBtn" data-topic="意见建议" type="button">意见建议</button>
+                  <button class="typeBtn" data-topic="其他" type="button">其他</button>
+                  <button class="typeBtn" data-topic="发现错误" type="button">发现错误</button>
+                  <button class="typeBtn" data-topic="使用感受" type="button">使用感受</button>
                 </div>
-                <input class="input" id="mTopic" type="text" readonly value="咨询类型：综合咨询" />
+                <input class="input" id="mTopic" type="text" readonly value="留言分类：随便说说" />
+                <div class="replyHint"><b>想要回复</b> 请填邮箱或电话，至少填一个；不填就只作留言，无法回复。</div>
                 <div class="formGrid">
-                  <input class="input" id="mName" type="text" autocomplete="off" placeholder="联系人姓名 *" />
-                  <input class="input" id="mPhone" type="tel" autocomplete="off" placeholder="联系电话 *" />
+                  <input class="input" id="mName" type="text" autocomplete="off" placeholder="怎么称呼（选填）" />
+                  <input class="input" id="mPhone" type="tel" autocomplete="off" placeholder="联系电话（想回复就填）" />
                 </div>
-                <input class="input" id="mEmail" type="email" autocomplete="off" placeholder="电子邮箱（选填）" />
-                <textarea class="input" id="mMessage" placeholder="请详细描述您的需求或问题，便于我们快速定位并处理。*" style="height:130px;"></textarea>
+                <input class="input" id="mEmail" type="email" autocomplete="off" placeholder="电子邮箱（想回复就填）" />
+                <textarea class="input" id="mMessage" placeholder="想说什么就写在这里 *" style="height:130px;"></textarea>
                 <div class="row" style="margin-top:4px;">
-                  <button class="btn btnGhost grow" id="copyMsg">复制工单内容</button>
-                  <button class="btn btnPrimary grow" id="sendMsg">提交工单</button>
+                  <button class="btn btnGhost grow" id="copyMsg">复制留言</button>
+                  <button class="btn btnPrimary grow" id="sendMsg">发送留言</button>
                 </div>
               </div>
             </div>
 
             <!-- 恢复出厂设置 -->
-            <div class="card">
+            <div class="card resetCard">
               <div class="memTop"><h3>恢复出厂设置</h3></div>
+              <p class="resetDesc">退出登录并清空本机账号与个性化设置（首页快捷方式、音乐设置等）；<b>不影响</b>「学习笔记」中的内容与已发送的留言。</p>
               <div class="row" style="margin-top:14px;"><button class="btn btnDanger" id="clearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>恢复出厂设置</button></div>
             </div>
 
@@ -2037,7 +2093,7 @@
             <span class="sfSep">·</span>
             <a href="#" id="sfTop">回到顶部</a>
           </div>
-          <div class="sfNote">本平台全部内容（代码 / 设计 / 数据）受著作权保护，未经授权请勿复制、转载或用于商业用途。</div>
+          <div class="sfNote">个人独立项目 · 不提供技术支持 · 不承诺回复时限与结果 · 不承担任何责任</div>
         </footer>
 
       </div>
@@ -2287,7 +2343,7 @@
       <div class="helpList">
         <div class="helpItem">
           <div class="helpQ"><span class="helpNum">1</span>工作台如何使用？</div>
-          <div class="helpA">左侧（或手机底部 Tab）切换「首页 / 工具 / 智能体 / 我的」四大板块。首页可自定义快捷方式，按住卡片拖动就能调整顺序；下载与联系支持都在「我的」页。</div>
+          <div class="helpA">左侧（或手机底部 Tab）切换「首页 / 工具 / 智能体 / 我的」四大板块。首页可自定义快捷方式，按住卡片拖动就能调整顺序；下载与留言板都在「我的」页。</div>
         </div>
         <div class="helpItem">
           <div class="helpQ"><span class="helpNum">2</span>账号会保存多久？</div>
@@ -2302,36 +2358,37 @@
           <div class="helpA">只存在你这台设备的浏览器里，不上传服务器。可以建文件夹分类，一条笔记里能放图片、视频和任意文件。</div>
         </div>
         <div class="helpItem">
-          <div class="helpQ"><span class="helpNum">5</span>还有其他问题？</div>
-          <div class="helpA">进入「我的账号」页，滚动到「联系与支持」区提交留言，或点击底部「隐私政策 / 服务条款」了解规则。</div>
+          <div class="helpQ"><span class="helpNum">5</span>想说点什么？</div>
+          <div class="helpA">「我的账号」页有留言板，想说的话可以写下来。想收到回复就填邮箱或电话，不填就无法回复；规则见底部「隐私政策 / 服务条款」。</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 联系与支持弹窗 -->
+<!-- 留言板弹窗 -->
 <div class="overlay" id="msgOv">
   <div class="dialog">
-    <div class="dlgHead"><p class="dlgTitle">联系与支持</p><button class="xBtn" id="xMsg">✕</button></div>
+    <div class="dlgHead"><p class="dlgTitle">留言板</p><button class="xBtn" id="xMsg">✕</button></div>
     <div class="dlgBody">
-      <div class="subtitle">请填写以下信息，我们会尽快与您联系。周一至周五 9:00–18:00 优先处理，其余时间看到即回复。</div>
+      <div class="subtitle">留言能看到。想收到回复请填邮箱或电话，没填就无法回复；是否回复由平台自行决定。不提供技术支持。</div>
       <div class="typePicker" id="msgTypePickerPop">
-        <button class="typeBtn active" data-topic="综合咨询" type="button">综合咨询</button>
-        <button class="typeBtn" data-topic="功能建议" type="button">功能建议</button>
-        <button class="typeBtn" data-topic="其他问题" type="button">其他问题</button>
-        <button class="typeBtn" data-topic="工具反馈" type="button">工具反馈</button>
-        <button class="typeBtn" data-topic="商务合作" type="button">商务合作</button>
+        <button class="typeBtn active" data-topic="随便说说" type="button">随便说说</button>
+        <button class="typeBtn" data-topic="意见建议" type="button">意见建议</button>
+        <button class="typeBtn" data-topic="其他" type="button">其他</button>
+        <button class="typeBtn" data-topic="发现错误" type="button">发现错误</button>
+        <button class="typeBtn" data-topic="使用感受" type="button">使用感受</button>
       </div>
-      <input id="mTopicPop" class="input" type="text" readonly value="咨询类型：综合咨询" />
-      <input id="mNamePop" class="input" type="text" autocomplete="off" placeholder="联系人姓名 *" />
-      <input id="mPhonePop" class="input" type="tel" autocomplete="off" placeholder="联系电话 *" />
-      <input id="mEmailPop" class="input" type="email" autocomplete="off" placeholder="电子邮箱（选填）" />
-      <textarea id="mMessagePop" class="input" placeholder="请详细描述您的需求或问题，便于我们快速定位并处理。*" style="height:100px;"></textarea>
+      <input id="mTopicPop" class="input" type="text" readonly value="留言分类：随便说说" />
+      <div class="replyHint"><b>想要回复</b> 请填邮箱或电话，至少填一个；不填就只作留言，无法回复。</div>
+      <input id="mNamePop" class="input" type="text" autocomplete="off" placeholder="怎么称呼（选填）" />
+      <input id="mPhonePop" class="input" type="tel" autocomplete="off" placeholder="联系电话（想回复就填）" />
+      <input id="mEmailPop" class="input" type="email" autocomplete="off" placeholder="电子邮箱（想回复就填）" />
+      <textarea id="mMessagePop" class="input" placeholder="想说什么就写在这里 *" style="height:100px;"></textarea>
     </div>
     <div class="dlgFoot">
-      <button class="btn btnGhost grow" id="copyMsgPop">复制工单内容</button>
-      <button class="btn btnPrimary grow" id="sendMsgPop">提交工单</button>
+      <button class="btn btnGhost grow" id="copyMsgPop">复制留言</button>
+      <button class="btn btnPrimary grow" id="sendMsgPop">发送留言</button>
     </div>
   </div>
 </div>
@@ -2382,15 +2439,27 @@
   <div class="dialog">
     <div class="dlgHead"><p class="dlgTitle">确认恢复出厂设置？</p><button class="xBtn" id="xOv">✕</button></div>
     <div class="dlgBody">
-      恢复出厂设置后会发生这些变化：
-      <ul style="margin:10px 0;padding-left:20px;font-size:13px;line-height:1.8;">
-        <li>当前账号会被删除。</li>
-        <li>偏好设置会被清空。</li>
-        <li>下次打开需要重新加载资源。</li>
-      </ul>
-      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.68);border:1px solid var(--stroke);">
+      <p class="resetLead">恢复出厂设置会重置本应用在本机的状态，请确认以下范围：</p>
+      <div class="resetGroup">
+        <div class="rgTitle rgDel">将清除（仅本机）</div>
+        <ul>
+          <li>登录账号与昵称</li>
+          <li>首页自定义快捷方式</li>
+          <li>音乐播放设置（模式 / 开关 / 屏蔽项）</li>
+          <li>上次停留的页面</li>
+        </ul>
+      </div>
+      <div class="resetGroup">
+        <div class="rgTitle rgKeep">不受影响（仍保留）</div>
+        <ul>
+          <li>「学习笔记」及本地附件（存于独立数据库，需到笔记内删除）</li>
+          <li>已发送的留言</li>
+          <li>第三方平台（GitHub 等）的账号与文件</li>
+        </ul>
+      </div>
+      <div class="resetCheck">
         <input id="ck" type="checkbox" style="margin-top:3px;width:16px;height:16px;" />
-        <label for="ck" style="font-size:13px;font-weight:700;color:rgba(31,36,48,.8);">我已了解后果，仍要继续</label>
+        <label for="ck">我已了解上述范围，仍要继续</label>
       </div>
     </div>
     <div class="dlgFoot">
@@ -2661,7 +2730,7 @@ $('shareWebBtn').addEventListener('click',async()=>{
 $('downloadAppBtn').addEventListener('click',()=>openUrl(CONTENT.downloads.apkUrl));
 $('downloadWinBtn').addEventListener('click',()=>openUrl(CONTENT.downloads.winUrl));
 
-/* 下载中心 - 反馈客服入口 */
+/* 下载中心 - 留言板入口 */
 $('goSupportBtn').addEventListener('click',()=>{
   const el=$('contactSection');
   if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); }
@@ -2736,11 +2805,11 @@ $('sideAccount').addEventListener('click',()=>openAccount(false));
 $('topAvatar').addEventListener('click',()=>openAccount(false));
 $('deleteAccountBtn').addEventListener('click',()=>{ localStorage.removeItem(KEY_ACCOUNT); paintAccount(); window.showToast('账号已删除，请重新注册'); openAccount(true); });
 
-/* ========= 联系与支持 ========= */
-const MSG_TYPES=['综合咨询','工具反馈','功能建议','商务合作','其他问题'];
-function topicText(raw){ return (raw||'').replace(/^(留言主题|咨询类型)：/,'').trim()||'综合咨询'; }
+/* ========= 留言板 ========= */
+const MSG_TYPES=['随便说说','发现错误','意见建议','使用感受','其他'];
+function topicText(raw){ return (raw||'').replace(/^(咨询类型|留言分类)：/,'').trim()||'随便说说'; }
 function setMsgType(topic, inPop){
-  const t=MSG_TYPES.includes(topic)?topic:'综合咨询';
+  const t=MSG_TYPES.includes(topic)?topic:'随便说说';
   const pickers=[$('msgTypePicker'),$('msgTypePickerPop')];
   pickers.forEach(picker=>{
     if(!picker) return;
@@ -2749,19 +2818,19 @@ function setMsgType(topic, inPop){
       btn.classList.toggle('active',is);
     });
   });
-  $('mTopic').value='咨询类型：'+t;
-  $('mTopicPop').value='咨询类型：'+t;
+  $('mTopic').value='留言分类：'+t;
+  $('mTopicPop').value='留言分类：'+t;
 }
 function buildMsgText(topicRaw, name, phone, email, msg){
   const topic=topicText(topicRaw);
   const n=name.trim()||'未填写', p=phone.trim()||'未填写', e=email.trim();
-  let lines=['【工单信息】','咨询类型：'+topic,'联系人：'+n,'联系电话：'+p];
+  let lines=['【留言】','留言分类：'+topic,'称呼：'+n,'联系电话：'+p,'回复条件：'+(p!=='未填写'||e?'已留联系方式（可回复）':'未留联系方式（无法回复）')];
   if(e) lines.push('电子邮箱：'+e);
-  if(msg.trim()) lines.push('详细说明：'+msg.trim());
+  if(msg.trim()) lines.push('留言内容：'+msg.trim());
   return lines.join('\n');
 }
 function openMsg(prefTopic){
-  let t='综合咨询', note='';
+  let t='随便说说', note='';
   if(prefTopic){ t=topicText(prefTopic); }
   setMsgType(t);
   $('mMessagePop').value=note;
@@ -2775,51 +2844,53 @@ function openMsg(prefTopic){
     setMsgType(btn.dataset.topic);
   });
 });
-$('heroMsg')&&$('heroMsg').addEventListener('click',()=>openMsg('综合咨询'));
+$('heroMsg')&&$('heroMsg').addEventListener('click',()=>openMsg('随便说说'));
 $('xMsg').addEventListener('click',()=>$('msgOv').classList.remove('show'));
 $('msgOv').addEventListener('click',e=>{ if(e.target===$('msgOv')) $('msgOv').classList.remove('show'); });
 $('copyMsgPop').addEventListener('click',async()=>{
-  const name=$('mNamePop').value.trim(), phone=$('mPhonePop').value.trim();
-  if(!name||!phone){ window.showToast('请先填写完整的必填信息'); return; }
+  if(!$('mMessagePop').value.trim()){ window.showToast('请先写下留言内容'); return; }
   const ok=await copyText(buildMsgText($('mTopicPop').value,$('mNamePop').value,$('mPhonePop').value,$('mEmailPop').value,$('mMessagePop').value));
-  showToast(ok?'已复制工单内容':'复制失败：请手动复制');
+  showToast(ok?'已复制留言内容':'复制失败：请手动复制');
 });
 $('sendMsgPop').addEventListener('click',async()=>{
   const name=$('mNamePop').value.trim(), phone=$('mPhonePop').value.trim();
   const topic=topicText($('mTopicPop').value);
   const email=$('mEmailPop').value.trim();
   const msg=$('mMessagePop').value.trim();
-  if(!name||!phone){ window.showToast('请先填写完整的必填信息'); return; }
-  const btn=$('sendMsgPop'); btn.textContent='正在提交…'; btn.disabled=true; btn.style.opacity=.7;
+  if(!msg){ window.showToast('请先写下留言内容'); return; }
+  const canReply=!!(phone||email);
+  const replyTo=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?email:undefined;
+  const btn=$('sendMsgPop'); btn.textContent='正在发送…'; btn.disabled=true; btn.style.opacity=.7;
   try{
     const res=await fetch(MAIL_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({_subject:`【工单】${topic} - ${name} (${phone})`,_template:'table',咨询类型:topic,联系人:name,联系电话:phone,电子邮箱:email||'（未填写）',详细说明:msg||'（未填写）',_captcha:false})});
-    if(res.ok){ window.showToast('工单提交成功！我们会尽快回复。'); $('msgOv').classList.remove('show'); $('mNamePop').value='';$('mPhonePop').value='';$('mEmailPop').value='';$('mMessagePop').value=''; }
-    else window.showToast('提交失败，请检查网络或稍后重试。');
-  }catch(e){ window.showToast('网络请求失败，请检查网络。'); }
-  finally{ btn.textContent='提交工单'; btn.disabled=false; btn.style.opacity=1; }
+      body:JSON.stringify({_subject:`【留言·${canReply?'可回复':'未留联系方式'}】${topic} - ${msg.slice(0,24)}`,_template:'table',_replyto:replyTo,留言分类:topic,称呼:name||'（未填写）',联系电话:phone||'（未填写）',电子邮箱:email||'（未填写）',回复条件:canReply?'已留联系方式（可回复）':'未留联系方式（无法回复）',留言内容:msg,_captcha:false})});
+    if(res.ok){ window.showToast(canReply?'留言已发送，已附上你的联系方式。':'留言已发送（未留联系方式，无法回复）。'); $('msgOv').classList.remove('show'); $('mNamePop').value='';$('mPhonePop').value='';$('mEmailPop').value='';$('mMessagePop').value=''; }
+    else window.showToast('发送失败，请检查网络或稍后重试。');
+  }catch(e){ window.showToast('发送失败，请检查网络。'); }
+  finally{ btn.textContent='发送留言'; btn.disabled=false; btn.style.opacity=1; }
 });
-/* 我的页内联系表单 */
+/* 我的页内留言表单 */
 $('copyMsg').addEventListener('click',async()=>{
-  const name=$('mName').value.trim(), phone=$('mPhone').value.trim();
-  if(!name||!phone){ window.showToast('请先填写完整的必填信息'); return; }
+  if(!$('mMessage').value.trim()){ window.showToast('请先写下留言内容'); return; }
   const ok=await copyText(buildMsgText($('mTopic').value,$('mName').value,$('mPhone').value,$('mEmail').value,$('mMessage').value));
-  showToast(ok?'已复制工单内容':'复制失败：请手动复制');
+  showToast(ok?'已复制留言内容':'复制失败：请手动复制');
 });
 $('sendMsg').addEventListener('click',async()=>{
   const name=$('mName').value.trim(), phone=$('mPhone').value.trim();
   const topic=topicText($('mTopic').value);
   const email=$('mEmail').value.trim();
   const msg=$('mMessage').value.trim();
-  if(!name||!phone){ window.showToast('请先填写完整的必填信息'); return; }
-  const btn=$('sendMsg'); btn.textContent='正在提交…'; btn.disabled=true; btn.style.opacity=.7;
+  if(!msg){ window.showToast('请先写下留言内容'); return; }
+  const canReply=!!(phone||email);
+  const replyTo=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?email:undefined;
+  const btn=$('sendMsg'); btn.textContent='正在发送…'; btn.disabled=true; btn.style.opacity=.7;
   try{
     const res=await fetch(MAIL_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({_subject:`【工单】${topic} - ${name} (${phone})`,_template:'table',咨询类型:topic,联系人:name,联系电话:phone,电子邮箱:email||'（未填写）',详细说明:msg||'（未填写）',_captcha:false})});
-    if(res.ok){ window.showToast('工单提交成功！我们会尽快回复。'); $('mName').value='';$('mPhone').value='';$('mEmail').value='';$('mMessage').value=''; }
-    else window.showToast('提交失败，请检查网络或稍后重试。');
-  }catch(e){ window.showToast('网络请求失败，请检查网络。'); }
-  finally{ btn.textContent='提交工单'; btn.disabled=false; btn.style.opacity=1; }
+      body:JSON.stringify({_subject:`【留言·${canReply?'可回复':'未留联系方式'}】${topic} - ${msg.slice(0,24)}`,_template:'table',_replyto:replyTo,留言分类:topic,称呼:name||'（未填写）',联系电话:phone||'（未填写）',电子邮箱:email||'（未填写）',回复条件:canReply?'已留联系方式（可回复）':'未留联系方式（无法回复）',留言内容:msg,_captcha:false})});
+    if(res.ok){ window.showToast(canReply?'留言已发送，已附上你的联系方式。':'留言已发送（未留联系方式，无法回复）。'); $('mName').value='';$('mPhone').value='';$('mEmail').value='';$('mMessage').value=''; }
+    else window.showToast('发送失败，请检查网络或稍后重试。');
+  }catch(e){ window.showToast('发送失败，请检查网络。'); }
+  finally{ btn.textContent='发送留言'; btn.disabled=false; btn.style.opacity=1; }
 });
 
 /* ========= 恢复出厂设置 ========= */
@@ -2830,8 +2901,11 @@ $('cancelClear').addEventListener('click',()=>{ $('ov').classList.remove('show')
 $('ck').addEventListener('change',e=>{ $('confirmClear').disabled=!e.target.checked; });
 $('confirmClear').addEventListener('click',()=>{
   localStorage.removeItem(KEY_ACCOUNT); localStorage.removeItem(KEY_LAST_VIEW);
+  localStorage.removeItem(KEY_SHORTCUTS);
+  localStorage.removeItem('music_mode'); localStorage.removeItem('music_excl'); localStorage.removeItem('music_bg');
   $('ov').classList.remove('show'); $('ck').checked=false; $('confirmClear').disabled=true;
-  paintAccount(); window.showToast('已恢复出厂设置，已回到初始状态');
+  paintAccount(); window.showToast('已恢复出厂设置，即将回到初始状态…');
+  setTimeout(function(){ location.reload(); }, 800);
 });
 
 /* ========= Spotlight 全局搜索 ========= */
@@ -2851,7 +2925,7 @@ const PAGES=[
   {id:'tools',name:'工具箱',desc:'全部工具导航'},
   {id:'agents',name:'智能体',desc:'AI 智能体入口'},
   {id:'notes',name:'学习笔记',desc:'随手存视频 / 灵感 / 图片，仅存本机'},
-  {id:'mine',name:'我的账号',desc:'账号 / 下载 / 联系支持'},
+  {id:'mine',name:'我的账号',desc:'账号 / 下载 / 留言板'},
 ];
 function buildIndex(){
   const idx=[];
@@ -6159,6 +6233,7 @@ if('serviceWorker' in navigator){
 }
 </script>
 
+<div id="musicScrim" class="music-scrim"></div>
 <div id="musicFab" class="music-fab" title="音乐">
   <div class="music-wave w1"></div>
   <div class="music-wave w2"></div>
@@ -6217,6 +6292,7 @@ if('serviceWorker' in navigator){
 ];
   const fab=document.getElementById('musicFab');
   const panel=document.getElementById('musicPanel');
+  const scrim=document.getElementById('musicScrim');
   const audio=document.getElementById('musicAudio');
   const titleEl=panel.querySelector('.music-title');
   const artistEl=panel.querySelector('.music-artist');
@@ -6314,7 +6390,7 @@ if('serviceWorker' in navigator){
   playBtn.addEventListener('click',toggle);
   nextBtn.addEventListener('click',next);
   prevBtn.addEventListener('click',prev);
-  closeBtn.addEventListener('click',function(){ panel.classList.remove('open'); });
+  closeBtn.addEventListener('click',function(){ closePanel(); });
   bigDisc.addEventListener('click',toggle);
   function applyVol(v){ vol=v; audio.volume=v/100; volSlider.value=v; volVal.textContent=v+'%'; }
   const MODE_NAMES={list:'列表循环',one:'单曲循环',shuffle:'随机播放'};
@@ -6352,16 +6428,48 @@ if('serviceWorker' in navigator){
   audio.addEventListener('play',function(){ playing=true; setSpin(true); playBtn.innerHTML='\u23F8'; updateListIcon(); });
   audio.addEventListener('pause',function(){ if(!audio.ended){ playing=false; setSpin(false); playBtn.innerHTML='\u25B6'; updateListIcon(); } });
   bar.addEventListener('click',function(e){ if(!audio.duration) return; const r=bar.getBoundingClientRect(); const ratio=(e.clientX-r.left)/r.width; if(ratio>=0&&ratio<=1) audio.currentTime=ratio*audio.duration; });
-  function togglePanel(){ if(panel.classList.contains('open')){ panel.classList.remove('open'); } else { if(idx<0) renderList(); panel.classList.add('open'); } }
-  // 点面板外空白即关闭（不用非得点 X）；面板内 / 悬浮球 / 最小化小圆点不触发
+  /* 手机全屏面板：打开时占一条浏览历史；按系统/浏览器返回键只关面板，不离开站点。
+     桌面（>=861px）是居中弹窗，不启用历史，行为保持原样。 */
+  var musicHistOn=false, musicBackSettling=false;
+  function musicIsMobile(){ try{ return !!(window.matchMedia && window.matchMedia('(max-width:860px)').matches); }catch(e){ return false; } }
+  function openPanel(){
+    if(idx<0) renderList();
+    panel.classList.add('open'); if(scrim) scrim.classList.add('open');
+    if(musicIsMobile() && !musicHistOn){
+      try{ history.pushState({zhMusicPanel:1},''); musicHistOn=true; }catch(e){}
+    }
+  }
+  function closePanel(fromBack){
+    panel.classList.remove('open'); if(scrim) scrim.classList.remove('open');
+    if(musicHistOn){
+      musicHistOn=false;
+      if(fromBack!==true){
+        musicBackSettling=true;
+        try{ history.back(); }catch(e){ musicBackSettling=false; }
+        setTimeout(function(){ musicBackSettling=false; },150);
+      }
+    }
+  }
+  function togglePanel(){ if(panel.classList.contains('open')) closePanel(); else openPanel(); }
+  window.addEventListener('popstate',function(){
+    var openNow=panel.classList.contains('open');
+    // 手动关闭触发的那次回退：面板已关，直接忽略；若面板又打开了，说明是用户主动按返回
+    if(musicBackSettling && !openNow){ musicBackSettling=false; return; }
+    musicBackSettling=false;
+    if(openNow){ musicHistOn=false; closePanel(true); }
+  });
+  // 点面板外任意处：只关闭面板，这一次点击不再传给外面的按钮 / 链接。
+  // 必须走捕获阶段并在到达目标前终止：原来用冒泡，等 document 收到时按钮动作早已执行。
   document.addEventListener('click',function(e){
     if(!panel.classList.contains('open')) return;
     if(!e.target || !e.target.closest) return;
-    if(!e.target.isConnected) return; // 目标已脱离文档（如点歌触发的列表重渲染），按面板内处理，不关闭
+    if(!e.target.isConnected) return;
     if(e.target.closest('#musicPanel')) return;
     if(e.target.closest('#musicFab')) return;
-    panel.classList.remove('open');
-  });
+    if(e.preventDefault) e.preventDefault();
+    if(e.stopPropagation) e.stopPropagation();
+    closePanel();
+  }, true);
   fab.addEventListener('click',function(){ togglePanel(); });
   applyVol(vol);
   applyMode(mode);
